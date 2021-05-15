@@ -6,9 +6,9 @@
 
 class Memory {
 public:
-    Memory();
-    std::uint8_t getByte(std::uint8_t address);
-    std::uint8_t writeByte(std::uint16_t address, std::uint8_t value);
+    Memory() = default;
+    std::uint8_t getByte(std::uint8_t address) const;
+    std::uint8_t writeByte(std::uint16_t address, std::uint8_t value) const;
 };
 
 
