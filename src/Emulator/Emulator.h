@@ -8,6 +8,7 @@
 
 class Emulator {
 public:
+    Emulator(): memory{}, stack{} {};
     void load(uint16_t instructions[]);
     void run(void);
 private:
@@ -17,8 +18,8 @@ private:
     uint8_t soundTimer;
     uint8_t registers[16];
 
-    Stack stack;
-    Memory memory;
+    const Stack& stack;
+    const Memory& memory;
 
     uint16_t fetch(void);
     void decodeEexcute(uint16_t instruction);
