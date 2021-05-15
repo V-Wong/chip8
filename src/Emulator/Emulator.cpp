@@ -7,7 +7,7 @@ uint16_t joinBytes(uint8_t msb, uint8_t lsb) {
 void Emulator::run(void) {
     while (true) {
         uint16_t instruction = fetch();
-        decodeEexcute(instruction);
+        decodeExecute(instruction);
     }
 }
 
@@ -16,3 +16,4 @@ uint16_t Emulator::fetch(void) {
     pc += 2;
     return instruction;
 }
+

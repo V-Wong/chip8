@@ -22,7 +22,7 @@ private:
     const Memory& memory;
 
     uint16_t fetch(void);
-    void decodeEexcute(uint16_t instruction);
+    void decodeExecute(uint16_t instruction);
 };
 
 
