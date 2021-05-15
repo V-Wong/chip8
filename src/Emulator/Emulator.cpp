@@ -17,3 +17,15 @@ uint16_t Emulator::fetch(void) {
     return instruction;
 }
 
+void Emulator::decodeExecute(uint16_t instruction) {
+    uint8_t type = instruction >> 12;
+    uint8_t x = (instruction >> 8) & 0xf;
+    uint8_t y = (instruction >> 4) & 0xf;
+    uint8_t n = instruction & 0xf;
+    uint8_t nn = instruction & 0xff;
+    uint16_t nnn = instruction & 0xfff;
+
+    switch(type) {
+        // rest of implementation
+    }
+}
