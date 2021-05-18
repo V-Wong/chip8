@@ -18,8 +18,8 @@ private:
     uint8_t soundTimer;
     uint8_t registers[16];
 
-    const Stack& stack;
-    const Memory& memory;
+    Stack stack;
+    Memory memory;
 
     uint16_t fetch(void);
     void decodeExecute(uint16_t instruction);
