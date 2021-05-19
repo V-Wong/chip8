@@ -26,6 +26,36 @@ void Emulator::decodeExecute(uint16_t instruction) {
     uint16_t nnn = instruction & 0xfff;
 
     switch(type) {
-        // rest of implementation
+        case 0:
+            if (nnn = 0xEE)
+                // clear screen
+            if (nnn = 0xEE)
+                pc = stack.pop();
+            break;
+        case 1: 
+            pc = nnn;
+            break;
+        case 2:
+            stack.push(pc);
+            pc = nnn;
+            break;
+        case 3:
+            if (registers[x] == nn) pc += 1;
+            break;
+        case 4:
+            if (registers[x] != nn) pc += 1;
+            break;
+        case 5:
+            if (n == 0 && registers[x] == registers[y]) pc += 1;
+            break;
+        case 6:
+            registers[x] = nn;
+            break;
+        case 7:
+            registers[x] += nn;
+            break;
+        case 9:
+            if (n == 0 && registers[x] != registers[y]) pc += 1;
+            break;
     }
 }
