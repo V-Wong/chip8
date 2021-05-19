@@ -4,6 +4,7 @@
 #include <cstdint>
 #include "../Stack/Stack.h"
 #include "../Memory/Memory.h"
+#include "../Display/Display.h"
 
 
 class Emulator {
@@ -11,6 +12,7 @@ public:
     Emulator(): memory{}, stack{} {};
     void load(uint16_t instructions[]);
     void run(void);
+    bool getPixel(int x, int y) { return display.getPixel(x, y); };
 private:
     uint16_t pc;
     uint16_t index;
@@ -20,6 +22,7 @@ private:
 
     Stack stack;
     Memory memory;
+    Display display;
 
     uint16_t fetch(void);
     void decodeExecute(uint16_t instruction);
