@@ -18,6 +18,7 @@ public:
         std::vector<bool>(DisplaySpecs::PIXEL_HEIGHT)
     ) {};
     void draw(int x, int y);
+    bool getPixel(int x, int y);
 private:
     std::vector<std::vector<bool>> pixels;
 };

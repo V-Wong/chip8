@@ -10,6 +10,8 @@
 constexpr int PIXEL_SIZE = 20;
 
 int main(int, char **) {
+    Emulator e;
+
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window* window = SDL_CreateWindow(
@@ -22,18 +24,22 @@ int main(int, char **) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderClear(renderer);
 
-    for (int i = 0; i < 64; i++) {
-        for (int j = 0; j < 32; j++) {
-            SDL_Rect r;
-            r.x = i * PIXEL_SIZE;
-            r.y = j * PIXEL_SIZE;
-            r.w = r.h = PIXEL_SIZE;
+    while (true) {
+        for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
+            for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
+                if (e.getPixel(i, j)) {
+                    SDL_Rect r;
+                    r.x = i * PIXEL_SIZE;
+                    r.y = j * PIXEL_SIZE;
+                    r.w = r.h = PIXEL_SIZE;
 
-            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-            SDL_RenderFillRect(renderer, &r);
-            SDL_RenderPresent(renderer);
-            SDL_Delay(50);
+                    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                    SDL_RenderFillRect(renderer, &r);
+                    SDL_RenderPresent(renderer);
+                }
+            }
         }
+        SDL_Delay(50);
     }
 
     SDL_DestroyWindow(window);
