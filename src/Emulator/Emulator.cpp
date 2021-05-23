@@ -27,8 +27,14 @@ void Emulator::decodeExecute(uint16_t instruction) {
 
     switch(type) {
         case 0:
-            if (nnn = 0xEE)
-                // clear screen
+            if (nnn = 0xEE) {
+                for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
+                    for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
+                        display.unset(x, y);
+                    }
+                }
+            }
+                
             if (nnn = 0xEE)
                 pc = stack.pop();
             break;
@@ -97,10 +103,42 @@ void Emulator::decodeExecute(uint16_t instruction) {
             break;
         case 0xA:
             index = nnn;
+            break;
         case 0xB:
             pc = nnn + registers[0];
+            break;
         case 0xC:
             // generate random number
+        case 0xD:
+            uint8_t xCoordinate = registers[x] % 32;
+            uint8_t yCoordinate = registers[y] % 32;
+            registers[15] = 0;
 
+            for (int i = 0; i < n; i++) {
+                uint8_t spriteData = index;
+
+                for (int j = 0; j < 8; j++) {
+                    bool bitSet = (spriteData >> (8 - j - 1)) & 1;
+                
+                    if (bitSet && display.getPixel(x, y)) {
+                        display.flip(x, y);
+                        registers[15] = 1;
+                    }
+                    
+                    if (bitSet && !display.getPixel(x, y)) {
+                        display.flip(x, y);
+                    }
+
+                    if (x == DisplaySpecs::PIXEL_WIDTH - 1)
+                        break;
+                    else
+                        x += 1;
+                }
+
+                if (y == DisplaySpecs::PIXEL_HEIGHT - 1)
+                    break;
+                else
+                    y += 1;
+            }
     }
 }
