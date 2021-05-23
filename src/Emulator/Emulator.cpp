@@ -176,6 +176,12 @@ void Emulator::decodeExecute(uint16_t instruction) {
                 registers[index + 1] = (registers[x] / 10) % 10;
                 registers[index] = registers[x] % 10;
             }
+            if (nn = 0x55)
+                for (int i = 0; i < x; i++)
+                    memory.writeByte(index + i, registers[i]);
+            if (nn == 0x66)
+                for (int i = 0; i < x; i++)
+                    registers[i] = memory.getByte(index + i);
             break;
     }
 }
