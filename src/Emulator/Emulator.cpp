@@ -34,7 +34,6 @@ void Emulator::decodeExecute(uint16_t instruction) {
                     }
                 }
             }
-                
             if (nnn = 0xEE)
                 pc = stack.pop();
             break;
@@ -140,5 +139,16 @@ void Emulator::decodeExecute(uint16_t instruction) {
                 else
                     y += 1;
             }
+            break;
+        case 0xE:
+            if (nn == 0x9E)
+                if (keysPressed[registers[x]])
+                    pc += 2;
+            
+            if (nn == 0xA1)
+                if (!keysPressed[registers[x]])
+                    pc += 2;
+            
+            break;
     }
 }
