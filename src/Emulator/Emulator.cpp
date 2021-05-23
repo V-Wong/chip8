@@ -8,12 +8,13 @@ void Emulator::run(void) {
     while (true) {
         uint16_t instruction = fetch();
         decodeExecute(instruction);
+        
+        if (!isBlocked) pc += 2;
     }
 }
 
 uint16_t Emulator::fetch(void) {
     uint16_t instruction = joinBytes(memory.getByte(pc), memory.getByte(pc + 1));
-    pc += 2;
     return instruction;
 }
 
@@ -157,5 +158,19 @@ void Emulator::decodeExecute(uint16_t instruction) {
                 delayTimer = registers[x];
             if (nn == 0x18)
                 soundTimer = registers[x];
+            if (nn = 0x1E)
+                index += registers[x];
+            if (nn == 0xA) {
+                if (isBlocked) {
+                    for (int i = 0; i < 16; i++) {
+                        if (keysPressed[i]) {
+                            registers[x] = i;
+                        }
+                    }
+                } else {
+                    isBlocked = true;
+                }
+            }
+            break;
     }
 }
