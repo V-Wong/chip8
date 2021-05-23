@@ -150,5 +150,12 @@ void Emulator::decodeExecute(uint16_t instruction) {
                     pc += 2;
             
             break;
+        case 0xF:
+            if (nn == 0x7)
+                registers[x] = delayTimer;
+            if (nn == 0x15)
+                delayTimer = registers[x];
+            if (nn == 0x18)
+                soundTimer = registers[x];
     }
 }
