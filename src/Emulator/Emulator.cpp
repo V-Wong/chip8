@@ -54,8 +54,53 @@ void Emulator::decodeExecute(uint16_t instruction) {
         case 7:
             registers[x] += nn;
             break;
+        case 8:
+            if (n == 0) registers[x] = registers[y];
+            if (n == 1) registers[x] |= registers[y];
+            if (n == 2) registers[x] &= registers[y];
+            if (n == 3) registers[x] ^= registers[y];
+            if (n == 4) {
+                int val = registers[x];
+                if (val + registers[y] > 255) registers[15] = 1;
+                else registers[15] = 0;
+
+                registers[x] += registers[y];
+            }
+            if (n == 5) {
+                int val = registers[x];
+                if (val > registers[y]) registers[15] = 1;
+                else registers[15] = 0;
+
+                registers[x] -= registers[y];
+            }
+            if (n == 7) {
+                int val = registers[x];
+                if (val > registers[y]) registers[15] = 1;
+                else registers[15] = 0;
+
+                registers[x] = registers[y] - registers[x];
+            }
+            if (n == 6) {
+                registers[x] = registers[y];
+                if (registers[x] & 1 == 1) registers[15] = 0;
+                else registers[15] = 1;
+                registers[x] >>= 1;
+            }
+            if (n == 0xE) {
+                registers[x] = registers[y];
+                if ((registers[x] >> 15) & 1 == 1) registers[15] = 0;
+                else registers[15] = 1;
+                registers[x] <<= 1;
+            }
         case 9:
             if (n == 0 && registers[x] != registers[y]) pc += 1;
             break;
+        case 0xA:
+            index = nnn;
+        case 0xB:
+            pc = nnn + registers[0];
+        case 0xC:
+            // generate random number
+
     }
 }
