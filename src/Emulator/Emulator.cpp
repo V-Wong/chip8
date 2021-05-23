@@ -171,6 +171,8 @@ void Emulator::decodeExecute(uint16_t instruction) {
                     isBlocked = true;
                 }
             }
+            if (nn == 0x29)
+                index = registers[x] & 0xF;
             if (nn == 0x33) {
                 registers[index] = (registers[x] / 100) % 10;
                 registers[index + 1] = (registers[x] / 10) % 10;
