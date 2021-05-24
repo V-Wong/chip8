@@ -1,5 +1,7 @@
 #include "Emulator.h"
 
+#include <stdlib.h>
+
 uint16_t joinBytes(uint8_t msb, uint8_t lsb) {
     return ((uint16_t)msb << 8) | lsb;
 }
@@ -108,7 +110,8 @@ void Emulator::decodeExecute(uint16_t instruction) {
             pc = nnn + registers[0];
             break;
         case 0xC:
-            // generate random number
+            registers[x] = (rand() % 0xffff) & nn;
+            break;
         case 0xD:
             uint8_t xCoordinate = registers[x] % 32;
             uint8_t yCoordinate = registers[y] % 32;
