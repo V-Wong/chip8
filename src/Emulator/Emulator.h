@@ -10,7 +10,7 @@
 class Emulator {
 public:
     Emulator(): memory{}, stack{} {};
-    void load(uint16_t instructions[]);
+    void load(std::vector<uint8_t> bytes);
     void run(void);
     bool getPixel(int x, int y) { return display.getPixel(x, y); };
     void keyPress(int key) { keysPressed[key] = true; isBlocked = false; };
