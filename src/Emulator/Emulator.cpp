@@ -6,6 +6,12 @@ uint16_t joinBytes(uint8_t msb, uint8_t lsb) {
     return ((uint16_t)msb << 8) | lsb;
 }
 
+void Emulator::load(std::vector<uint8_t> bytes) {
+    for (int i = 0; i < bytes.size(); i++) {
+        memory.writeByte(0x200 + i, bytes.at(i));
+    }
+}
+
 void Emulator::run(void) {
     while (true) {
         uint16_t instruction = fetch();
