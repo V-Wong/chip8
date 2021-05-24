@@ -1,4 +1,7 @@
 #include <iostream>
+#include <fstream>
+#include <iterator>
+#include <vector>
 
 #include "SDL.h"
 
@@ -9,8 +12,11 @@
 
 constexpr int PIXEL_SIZE = 20;
 
+std::vector<uint8_t> readFile();
+
 int main(int, char **) {
     Emulator e;
+    e.load(readFile());
 
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -24,7 +30,7 @@ int main(int, char **) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderClear(renderer);
 
-    while (true) {
+    for (int x = 0; x < 50; x++) {
         for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
             for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
                 if (e.getPixel(i, j)) {
@@ -39,9 +45,23 @@ int main(int, char **) {
                 }
             }
         }
-        SDL_Delay(50);
+        e.run();
+        SDL_Delay(100);
     }
 
     SDL_DestroyWindow(window);
     SDL_Quit();
+}
+
+std::vector<uint8_t> readFile() {
+    std::ifstream input("./ibm.ch8", std::ios::binary);
+
+    std::vector<uint8_t> bytes(
+         (std::istreambuf_iterator<char>(input)),
+         (std::istreambuf_iterator<char>())
+    );
+
+    input.close();
+
+    return bytes;
 }
