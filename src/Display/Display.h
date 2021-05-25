@@ -17,10 +17,10 @@ public:
         DisplaySpecs::PIXEL_WIDTH, 
         std::vector<bool>(DisplaySpecs::PIXEL_HEIGHT)
     ) {};
-    void set(int x, int y);
-    void unset(int x, int y);
-    void flip(int x, int y);
-    bool getPixel(int x, int y);
+    void set(uint8_t x, uint8_t y);
+    void unset(uint8_t x, uint8_t y);
+    void flip(uint8_t x, uint8_t y);
+    bool getPixel(uint8_t x, uint8_t y);
 private:
     std::vector<std::vector<bool>> pixels;
 };
