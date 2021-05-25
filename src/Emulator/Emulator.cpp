@@ -13,12 +13,9 @@ void Emulator::load(std::vector<uint8_t> bytes) {
 }
 
 void Emulator::run(void) {
-    while (true) {
-        uint16_t instruction = fetch();
-        decodeExecute(instruction);
-        
-        if (!isBlocked) pc += 2;
-    }
+    uint16_t instruction = fetch();
+    decodeExecute(instruction);
+    if (!isBlocked) pc += 2;
 }
 
 uint16_t Emulator::fetch(void) {
