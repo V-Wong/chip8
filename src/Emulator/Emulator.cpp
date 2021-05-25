@@ -32,15 +32,8 @@ void Emulator::decodeExecute(uint16_t instruction) {
 
     switch (d.type) {
         case 0:
-            if (d.nnn == 0xE0) {
-                for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
-                    for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
-                        display.unset(d.x, d.y);
-                    }
-                }
-            }
-            if (d.nnn == 0xEE)
-                pc = stack.pop();
+            if (d.nnn == 0xE0) clearDisplay();
+            if (d.nnn == 0xEE) pc = stack.pop();
             break;
         case 1: 
             pc = d.nnn - 2;
@@ -116,41 +109,8 @@ void Emulator::decodeExecute(uint16_t instruction) {
             registers[d.x] = (rand() % 0xffff) & d.nn;
             break;
         case 0xD:
-        {
-            uint8_t xCoordinate = registers[d.x] % 64;
-            uint8_t yCoordinate = registers[d.y] % 32;
-            registers[15] = 0;
-
-            for (int i = 0; i < d.n; i++) {
-                uint8_t spriteData = memory.getByte(index + i);
-
-                xCoordinate = registers[d.x] % 64;
-                for (int j = 0; j < 8; j++) {
-                    bool bitSet = (spriteData >> (8 - j - 1)) & 1;
-
-                    if (bitSet && display.getPixel(xCoordinate, yCoordinate)) {
-                        display.flip(xCoordinate, yCoordinate);
-                        registers[15] = 1;
-                        displayUpdated = true;
-                    }
-                    
-                    if (bitSet && !display.getPixel(xCoordinate, yCoordinate)) {
-                        display.flip(xCoordinate, yCoordinate);
-                        displayUpdated = true;
-                    }
-
-                    if (xCoordinate == DisplaySpecs::PIXEL_WIDTH - 1)
-                        break;
-                    xCoordinate += 1;
-                }
-    
-                yCoordinate += 1;
-
-                if (yCoordinate == DisplaySpecs::PIXEL_HEIGHT - 1)
-                    break;
-            }
+            updateDisplay(d);
             break;
-        }
         case 0xE:
             if (d.nn == 0x9E)
                 if (keysPressed[registers[d.x]])
@@ -195,5 +155,48 @@ void Emulator::decodeExecute(uint16_t instruction) {
                 for (int i = 0; i < d.x; i++)
                     registers[i] = memory.getByte(index + i);
             break;
+    }
+}
+
+void Emulator::updateDisplay(DecodedInstruction d) {
+    uint8_t xCoordinate = registers[d.x] % 64;
+    uint8_t yCoordinate = registers[d.y] % 32;
+    registers[15] = 0;
+
+    for (int i = 0; i < d.n; i++) {
+        uint8_t spriteData = memory.getByte(index + i);
+
+        xCoordinate = registers[d.x] % 64;
+        for (int j = 0; j < 8; j++) {
+            bool bitSet = (spriteData >> (8 - j - 1)) & 1;
+
+            if (bitSet && display.getPixel(xCoordinate, yCoordinate)) {
+                display.flip(xCoordinate, yCoordinate);
+                registers[15] = 1;
+                displayUpdated = true;
+            }
+            
+            if (bitSet && !display.getPixel(xCoordinate, yCoordinate)) {
+                display.flip(xCoordinate, yCoordinate);
+                displayUpdated = true;
+            }
+
+            if (xCoordinate == DisplaySpecs::PIXEL_WIDTH - 1)
+                break;
+            xCoordinate += 1;
+        }
+
+        yCoordinate += 1;
+
+        if (yCoordinate == DisplaySpecs::PIXEL_HEIGHT - 1)
+            break;
+    }
+}
+
+void Emulator::clearDisplay(void) {
+    for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
+        for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
+            display.unset(i, j);
+        }
     }
 }

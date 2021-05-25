@@ -5,6 +5,7 @@
 #include "../Stack/Stack.h"
 #include "../Memory/Memory.h"
 #include "../Display/Display.h"
+#include "DecodedInstruction.h"
 
 
 class Emulator {
@@ -31,6 +32,8 @@ private:
 
     uint16_t fetch(void);
     void decodeExecute(uint16_t instruction);
+    void updateDisplay(DecodedInstruction d);
+    void clearDisplay(void);
 
     bool displayUpdated;
 };
