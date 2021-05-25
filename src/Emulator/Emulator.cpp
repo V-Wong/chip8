@@ -9,9 +9,9 @@ uint16_t joinBytes(uint8_t msb, uint8_t lsb) {
     return ((uint16_t)msb << 8) | lsb;
 }
 
-void Emulator::load(std::vector<uint8_t> bytes) {
+void Emulator::load(uint16_t start, std::vector<uint8_t> bytes) {
     for (int i = 0; i < bytes.size(); i++) {
-        memory.writeByte(0x200 + i, bytes.at(i));
+        memory.writeByte(start + i, bytes.at(i));
     }
 }
 

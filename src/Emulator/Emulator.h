@@ -2,16 +2,20 @@
 #define CHIP8_EMULATOR_H
 
 #include <cstdint>
+
 #include "../Stack/Stack.h"
 #include "../Memory/Memory.h"
 #include "../Display/Display.h"
 #include "DecodedInstruction.h"
+#include "Fonts.h"
 
 
 class Emulator {
 public:
-    Emulator(): memory{}, stack{} {};
-    void load(std::vector<uint8_t> bytes);
+    Emulator(): memory{}, stack{} {
+        load(0x50, FONTS);
+    };
+    void load(uint16_t start, std::vector<uint8_t> bytes);
     void run(void);
     bool getPixel(uint8_t x, uint8_t y) { return display.getPixel(x, y); };
     void keyPress(int key) { keysPressed[key] = true; isBlocked = false; };
