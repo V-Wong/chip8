@@ -18,7 +18,8 @@ void Emulator::load(std::vector<uint8_t> bytes) {
 void Emulator::run(void) {
     uint16_t instruction = fetch();
     displayUpdated = false;
-    decodeExecute(instruction);
+    DecodedInstruction d{instruction};
+    execute(d);
     if (!isBlocked) pc += 2;
 }
 
@@ -27,9 +28,7 @@ uint16_t Emulator::fetch(void) {
     return instruction;
 }
 
-void Emulator::decodeExecute(uint16_t instruction) {
-    DecodedInstruction d{instruction};
-
+void Emulator::execute(DecodedInstruction d) {
     switch (d.type) {
         case 0:
             if (d.nnn == 0xE0) clearDisplay();

@@ -31,7 +31,7 @@ private:
     bool keysPressed[16];
 
     uint16_t fetch(void);
-    void decodeExecute(uint16_t instruction);
+    void execute(DecodedInstruction d);
     void updateDisplay(DecodedInstruction d);
     void clearDisplay(void);
 
