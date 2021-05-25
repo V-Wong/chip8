@@ -15,6 +15,7 @@ public:
     bool getPixel(uint8_t x, uint8_t y) { return display.getPixel(x, y); };
     void keyPress(int key) { keysPressed[key] = true; isBlocked = false; };
     void keyUnpress(int key) { keysPressed[key] = false; };
+    bool isDisplayUpdated() { return displayUpdated; };
 private:
     uint16_t pc;
     uint16_t index;
@@ -30,6 +31,8 @@ private:
 
     uint16_t fetch(void);
     void decodeExecute(uint16_t instruction);
+
+    bool displayUpdated;
 };
 
 

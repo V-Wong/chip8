@@ -15,6 +15,7 @@ void Emulator::load(std::vector<uint8_t> bytes) {
 
 void Emulator::run(void) {
     uint16_t instruction = fetch();
+    displayUpdated = false;
     decodeExecute(instruction);
     if (!isBlocked) pc += 2;
 }
@@ -132,10 +133,12 @@ void Emulator::decodeExecute(uint16_t instruction) {
                     if (bitSet && display.getPixel(xCoordinate, yCoordinate)) {
                         display.flip(xCoordinate, yCoordinate);
                         registers[15] = 1;
+                        displayUpdated = true;
                     }
                     
                     if (bitSet && !display.getPixel(xCoordinate, yCoordinate)) {
                         display.flip(xCoordinate, yCoordinate);
+                        displayUpdated = true;
                     }
 
                     if (xCoordinate == DisplaySpecs::PIXEL_WIDTH - 1)
