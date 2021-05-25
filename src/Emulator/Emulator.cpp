@@ -107,7 +107,7 @@ void Emulator::execute(DecodedInstruction d) {
             if (d.nn == 0x7) registers[d.x] = delayTimer;
             if (d.nn == 0x15) delayTimer = registers[d.x];
             if (d.nn == 0x18) soundTimer = registers[d.x];
-            if (d.nn = 0x1E) index += registers[d.x];
+            if (d.nn == 0x1E) index += registers[d.x];
             if (d.nn == 0xA) {
                 if (isBlocked) {
                     for (int i = 0; i < 16; i++) {
@@ -125,11 +125,11 @@ void Emulator::execute(DecodedInstruction d) {
                 memory.writeByte(index + 1, (registers[d.x] / 10) % 10);
                 memory.writeByte(index + 2, registers[d.x] % 10);
             }
-            if (d.nn = 0x55)
-                for (int i = 0; i < d.x; i++)
+            if (d.nn == 0x55)
+                for (int i = 0; i <= d.x; i++)
                     memory.writeByte(index + i, registers[i]);
-            if (d.nn == 0x66)
-                for (int i = 0; i < d.x; i++)
+            if (d.nn == 0x65)
+                for (int i = 0; i <= d.x; i++)
                     registers[i] = memory.getByte(index + i);
             break;
     }
