@@ -62,36 +62,25 @@ void Emulator::execute(DecodedInstruction d) {
             if (d.n == 2) registers[d.x] &= registers[d.y];
             if (d.n == 3) registers[d.x] ^= registers[d.y];
             if (d.n == 4) {
-                int val = registers[d.x];
-                if (val + registers[d.y] > 255) registers[15] = 1;
-                else registers[15] = 0;
-
+                registers[15] = ((int)registers[d.x] + registers[d.y] > UINT8_MAX) ? 1 : 0;
                 registers[d.x] += registers[d.y];
             }
             if (d.n == 5) {
-                int val = registers[d.x];
-                if (val > registers[d.y]) registers[15] = 1;
-                else registers[15] = 0;
-
+                registers[15] = ((int)registers[d.x] > registers[d.y]) ? 1 : 0;
                 registers[d.x] -= registers[d.y];
             }
             if (d.n == 7) {
-                int val = registers[d.x];
-                if (val > registers[d.y]) registers[15] = 1;
-                else registers[15] = 0;
-
+                registers[15] = ((int)registers[d.x] > registers[d.y]) ? 1 : 0;
                 registers[d.x] = registers[d.y] - registers[d.x];
             }
             if (d.n == 6) {
                 registers[d.x] = registers[d.y];
-                if (registers[d.x] & 1 == 1) registers[15] = 0;
-                else registers[15] = 1;
+                registers[15] = (registers[d.x] & 1 == 1) ? 0 : 1;
                 registers[d.x] >>= 1;
             }
             if (d.n == 0xE) {
                 registers[d.x] = registers[d.y];
-                if ((registers[d.x] >> 15) & 1 == 1) registers[15] = 0;
-                else registers[15] = 1;
+                registers[15] = ((registers[d.x] >> 15) & 1 == 1) ? 0 : 1;
                 registers[d.x] <<= 1;
             }
             break;
