@@ -1,5 +1,6 @@
 #include "Emulator.h"
 
+#include <iostream>
 #include <stdlib.h>
 
 uint16_t joinBytes(uint8_t msb, uint8_t lsb) {
@@ -33,7 +34,7 @@ void Emulator::decodeExecute(uint16_t instruction) {
 
     switch(type) {
         case 0:
-            if (nnn == 0xEE) {
+            if (nnn == 0xE0) {
                 for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
                     for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
                         display.unset(x, y);
@@ -44,7 +45,7 @@ void Emulator::decodeExecute(uint16_t instruction) {
                 pc = stack.pop();
             break;
         case 1: 
-            pc = nnn;
+            pc = nnn - 2;
             break;
         case 2:
             stack.push(pc);
@@ -117,35 +118,35 @@ void Emulator::decodeExecute(uint16_t instruction) {
             break;
         case 0xD:
         {
-            uint8_t xCoordinate = registers[x] % 32;
+            uint8_t xCoordinate = registers[x] % 64;
             uint8_t yCoordinate = registers[y] % 32;
             registers[15] = 0;
 
             for (int i = 0; i < n; i++) {
-                uint8_t spriteData = index;
+                uint8_t spriteData = memory.getByte(index + i);
 
+                xCoordinate = registers[x] % 64;
                 for (int j = 0; j < 8; j++) {
                     bool bitSet = (spriteData >> (8 - j - 1)) & 1;
-                
-                    if (bitSet && display.getPixel(x, y)) {
-                        display.flip(x, y);
+
+                    if (bitSet && display.getPixel(xCoordinate, yCoordinate)) {
+                        display.flip(xCoordinate, yCoordinate);
                         registers[15] = 1;
                     }
                     
-                    if (bitSet && !display.getPixel(x, y)) {
-                        display.flip(x, y);
+                    if (bitSet && !display.getPixel(xCoordinate, yCoordinate)) {
+                        display.flip(xCoordinate, yCoordinate);
                     }
 
-                    if (x == DisplaySpecs::PIXEL_WIDTH - 1)
+                    if (xCoordinate == DisplaySpecs::PIXEL_WIDTH - 1)
                         break;
-                    else
-                        x += 1;
+                    xCoordinate += 1;
                 }
+    
+                yCoordinate += 1;
 
-                if (y == DisplaySpecs::PIXEL_HEIGHT - 1)
+                if (yCoordinate == DisplaySpecs::PIXEL_HEIGHT - 1)
                     break;
-                else
-                    y += 1;
             }
             break;
         }
@@ -182,6 +183,7 @@ void Emulator::decodeExecute(uint16_t instruction) {
             if (nn == 0x29)
                 index = registers[x] & 0xF;
             if (nn == 0x33) {
+                std::cout << "test";
                 registers[index] = (registers[x] / 100) % 10;
                 registers[index + 1] = (registers[x] / 10) % 10;
                 registers[index] = registers[x] % 10;

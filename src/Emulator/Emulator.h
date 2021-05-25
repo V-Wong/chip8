@@ -12,7 +12,7 @@ public:
     Emulator(): memory{}, stack{} {};
     void load(std::vector<uint8_t> bytes);
     void run(void);
-    bool getPixel(int x, int y) { return display.getPixel(x, y); };
+    bool getPixel(uint8_t x, uint8_t y) { return display.getPixel(x, y); };
     void keyPress(int key) { keysPressed[key] = true; isBlocked = false; };
     void keyUnpress(int key) { keysPressed[key] = false; };
 private:
