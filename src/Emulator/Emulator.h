@@ -5,6 +5,7 @@
 #include "../Stack/Stack.h"
 #include "../Memory/Memory.h"
 #include "../Display/Display.h"
+#include "DecodedInstruction.h"
 
 
 class Emulator {
@@ -22,6 +23,7 @@ private:
     uint8_t delayTimer;
     uint8_t soundTimer;
     uint8_t registers[16];
+    uint8_t& flagRegister = registers[16];
     bool isBlocked;
 
     Stack stack;
@@ -30,7 +32,9 @@ private:
     bool keysPressed[16];
 
     uint16_t fetch(void);
-    void decodeExecute(uint16_t instruction);
+    void execute(DecodedInstruction d);
+    void updateDisplay(DecodedInstruction d);
+    void clearDisplay(void);
 
     bool displayUpdated;
 };
