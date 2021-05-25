@@ -112,24 +112,14 @@ void Emulator::decodeExecute(uint16_t instruction) {
             updateDisplay(d);
             break;
         case 0xE:
-            if (d.nn == 0x9E)
-                if (keysPressed[registers[d.x]])
-                    pc += 2;
-            
-            if (d.nn == 0xA1)
-                if (!keysPressed[registers[d.x]])
-                    pc += 2;
-            
+            if (d.nn == 0x9E && keysPressed[registers[d.x]]) pc += 2;
+            if (d.nn == 0xA1 && !keysPressed[registers[d.x]]) pc += 2;
             break;
         case 0xF:
-            if (d.nn == 0x7)
-                registers[d.x] = delayTimer;
-            if (d.nn == 0x15)
-                delayTimer = registers[d.x];
-            if (d.nn == 0x18)
-                soundTimer = registers[d.x];
-            if (d.nn = 0x1E)
-                index += registers[d.x];
+            if (d.nn == 0x7) registers[d.x] = delayTimer;
+            if (d.nn == 0x15) delayTimer = registers[d.x];
+            if (d.nn == 0x18) soundTimer = registers[d.x];
+            if (d.nn = 0x1E) index += registers[d.x];
             if (d.nn == 0xA) {
                 if (isBlocked) {
                     for (int i = 0; i < 16; i++) {
@@ -141,8 +131,7 @@ void Emulator::decodeExecute(uint16_t instruction) {
                     isBlocked = true;
                 }
             }
-            if (d.nn == 0x29)
-                index = registers[d.x] & 0xF;
+            if (d.nn == 0x29) index = registers[d.x] & 0xF;
             if (d.nn == 0x33) {
                 registers[index] = (registers[d.x] / 100) % 10;
                 registers[index + 1] = (registers[d.x] / 10) % 10;
