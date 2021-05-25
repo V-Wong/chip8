@@ -12,11 +12,10 @@
 
 constexpr int PIXEL_SIZE = 20;
 
-std::vector<uint8_t> readFile();
+std::vector<uint8_t> readProgram();
 
 int main(int, char **) {
-    Emulator e;
-    e.load(0x200, readFile());
+    Emulator e(readProgram());
 
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -55,7 +54,7 @@ int main(int, char **) {
     SDL_Quit();
 }
 
-std::vector<uint8_t> readFile() {
+std::vector<uint8_t> readProgram() {
     std::ifstream input("./test.ch8", std::ios::binary);
 
     std::vector<uint8_t> bytes(

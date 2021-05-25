@@ -12,7 +12,8 @@
 
 class Emulator {
 public:
-    Emulator(): memory{}, stack{} {
+    Emulator(std::vector<uint8_t> program): memory{}, stack{} {
+        load(0x200, program);
         load(0x50, FONTS);
     };
     void load(uint16_t start, std::vector<uint8_t> bytes);
