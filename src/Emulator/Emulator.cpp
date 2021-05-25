@@ -119,6 +119,7 @@ void Emulator::decodeExecute(uint16_t instruction) {
             registers[x] = (rand() % 0xffff) & nn;
             break;
         case 0xD:
+        {
             uint8_t xCoordinate = registers[x] % 32;
             uint8_t yCoordinate = registers[y] % 32;
             registers[15] = 0;
@@ -150,6 +151,7 @@ void Emulator::decodeExecute(uint16_t instruction) {
                     y += 1;
             }
             break;
+        }
         case 0xE:
             if (nn == 0x9E)
                 if (keysPressed[registers[x]])
