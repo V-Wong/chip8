@@ -34,7 +34,7 @@ void Emulator::execute(DecodedInstruction d) {
             if (d.nnn == 0xE0) clearDisplay();
             if (d.nnn == 0xEE) pc = stack.pop();
             break;
-        case 1: 
+        case 1:
             pc = d.nnn - 2;
             break;
         case 2:
@@ -42,10 +42,10 @@ void Emulator::execute(DecodedInstruction d) {
             pc = d.nnn;
             break;
         case 3:
-            if (registers[d.x] == d.nn) pc += 1;
+            if (registers[d.x] == d.nn) pc += 2;
             break;
         case 4:
-            if (registers[d.x] != d.nn) pc += 1;
+            if (registers[d.x] != d.nn) pc += 2;
             break;
         case 5:
             if (d.n == 0 && registers[d.x] == registers[d.y]) pc += 1;
@@ -155,6 +155,7 @@ void Emulator::updateDisplay(DecodedInstruction d) {
             
             if (bitSet && !display.getPixel(xCoordinate, yCoordinate)) {
                 display.flip(xCoordinate, yCoordinate);
+                flagRegister = 0;
                 displayUpdated = true;
             }
 
