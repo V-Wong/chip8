@@ -23,6 +23,7 @@ private:
     uint8_t delayTimer;
     uint8_t soundTimer;
     uint8_t registers[16];
+    uint8_t& flagRegister = registers[16];
     bool isBlocked;
 
     Stack stack;

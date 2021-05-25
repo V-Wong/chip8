@@ -62,25 +62,25 @@ void Emulator::execute(DecodedInstruction d) {
             if (d.n == 2) registers[d.x] &= registers[d.y];
             if (d.n == 3) registers[d.x] ^= registers[d.y];
             if (d.n == 4) {
-                registers[15] = ((int)registers[d.x] + registers[d.y] > UINT8_MAX) ? 1 : 0;
+                flagRegister = ((int)registers[d.x] + registers[d.y] > UINT8_MAX) ? 1 : 0;
                 registers[d.x] += registers[d.y];
             }
             if (d.n == 5) {
-                registers[15] = ((int)registers[d.x] > registers[d.y]) ? 1 : 0;
+                flagRegister = ((int)registers[d.x] > registers[d.y]) ? 1 : 0;
                 registers[d.x] -= registers[d.y];
             }
             if (d.n == 7) {
-                registers[15] = ((int)registers[d.x] > registers[d.y]) ? 1 : 0;
+                flagRegister = ((int)registers[d.x] > registers[d.y]) ? 1 : 0;
                 registers[d.x] = registers[d.y] - registers[d.x];
             }
             if (d.n == 6) {
                 registers[d.x] = registers[d.y];
-                registers[15] = (registers[d.x] & 1 == 1) ? 0 : 1;
+                flagRegister = (registers[d.x] & 1 == 1) ? 0 : 1;
                 registers[d.x] >>= 1;
             }
             if (d.n == 0xE) {
                 registers[d.x] = registers[d.y];
-                registers[15] = ((registers[d.x] >> 15) & 1 == 1) ? 0 : 1;
+                flagRegister = ((registers[d.x] >> 15) & 1 == 1) ? 0 : 1;
                 registers[d.x] <<= 1;
             }
             break;
@@ -138,7 +138,7 @@ void Emulator::execute(DecodedInstruction d) {
 void Emulator::updateDisplay(DecodedInstruction d) {
     uint8_t xCoordinate = registers[d.x] % 64;
     uint8_t yCoordinate = registers[d.y] % 32;
-    registers[15] = 0;
+    flagRegister = 0;
 
     for (int i = 0; i < d.n; i++) {
         uint8_t spriteData = memory.getByte(index + i);
@@ -149,7 +149,7 @@ void Emulator::updateDisplay(DecodedInstruction d) {
 
             if (bitSet && display.getPixel(xCoordinate, yCoordinate)) {
                 display.flip(xCoordinate, yCoordinate);
-                registers[15] = 1;
+                flagRegister = 1;
                 displayUpdated = true;
             }
             
