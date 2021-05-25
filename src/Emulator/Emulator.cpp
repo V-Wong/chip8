@@ -33,14 +33,14 @@ void Emulator::decodeExecute(uint16_t instruction) {
 
     switch(type) {
         case 0:
-            if (nnn = 0xEE) {
+            if (nnn == 0xEE) {
                 for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
                     for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
                         display.unset(x, y);
                     }
                 }
             }
-            if (nnn = 0xEE)
+            if (nnn == 0xEE)
                 pc = stack.pop();
             break;
         case 1: 
