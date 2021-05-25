@@ -16,7 +16,7 @@ std::vector<uint8_t> readFile();
 
 int main(int, char **) {
     Emulator e;
-    e.load(readFile());
+    e.load(0x200, readFile());
 
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -42,12 +42,12 @@ int main(int, char **) {
 
                         SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
                         SDL_RenderFillRect(renderer, &r);
-                        SDL_RenderPresent(renderer);
                     }
                 }
             }
         }
- 
+    SDL_RenderPresent(renderer);
+
         e.run();
     }
 
@@ -56,7 +56,7 @@ int main(int, char **) {
 }
 
 std::vector<uint8_t> readFile() {
-    std::ifstream input("./IBM.ch8", std::ios::binary);
+    std::ifstream input("./test.ch8", std::ios::binary);
 
     std::vector<uint8_t> bytes(
          (std::istreambuf_iterator<char>(input)),
