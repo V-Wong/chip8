@@ -30,23 +30,25 @@ int main(int, char **) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderClear(renderer);
 
-    for (int x = 0; x < 50; x++) {
-        for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
-            for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
-                if (e.getPixel(i, j)) {
-                    SDL_Rect r;
-                    r.x = i * PIXEL_SIZE;
-                    r.y = j * PIXEL_SIZE;
-                    r.w = r.h = PIXEL_SIZE;
+    for (int x = 0; x < 10000; x++) {
+        if (e.isDisplayUpdated()) {
+            for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
+                for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
+                    if (e.getPixel(i, j)) {
+                        SDL_Rect r;
+                        r.x = i * PIXEL_SIZE;
+                        r.y = j * PIXEL_SIZE;
+                        r.w = r.h = PIXEL_SIZE;
 
-                    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-                    SDL_RenderFillRect(renderer, &r);
-                    SDL_RenderPresent(renderer);
+                        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                        SDL_RenderFillRect(renderer, &r);
+                        SDL_RenderPresent(renderer);
+                    }
                 }
             }
         }
+ 
         e.run();
-        SDL_Delay(100);
     }
 
     SDL_DestroyWindow(window);
@@ -54,7 +56,7 @@ int main(int, char **) {
 }
 
 std::vector<uint8_t> readFile() {
-    std::ifstream input("./ibm.ch8", std::ios::binary);
+    std::ifstream input("./IBM.ch8", std::ios::binary);
 
     std::vector<uint8_t> bytes(
          (std::istreambuf_iterator<char>(input)),
