@@ -121,9 +121,9 @@ void Emulator::execute(DecodedInstruction d) {
             }
             if (d.nn == 0x29) index = registers[d.x] & 0xF;
             if (d.nn == 0x33) {
-                registers[index] = (registers[d.x] / 100) % 10;
-                registers[index + 1] = (registers[d.x] / 10) % 10;
-                registers[index] = registers[d.x] % 10;
+                memory.writeByte(index, (registers[d.x] / 100) % 10);
+                memory.writeByte(index + 1, (registers[d.x] / 10) % 10);
+                memory.writeByte(index + 2, registers[d.x] % 10);
             }
             if (d.nn = 0x55)
                 for (int i = 0; i < d.x; i++)
