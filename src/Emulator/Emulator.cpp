@@ -17,10 +17,10 @@ void Emulator::load(uint16_t start, std::vector<uint8_t> bytes) {
 
 void Emulator::run(void) {
     uint16_t instruction = fetch();
+    pc += 2;
     displayUpdated = false;
     DecodedInstruction d{instruction};
     execute(d);
-    if (!isBlocked) pc += 2;
 }
 
 uint16_t Emulator::fetch(void) {
@@ -35,7 +35,7 @@ void Emulator::execute(DecodedInstruction d) {
             if (d.nnn == 0xEE) pc = stack.pop();
             break;
         case 1:
-            pc = d.nnn - 2;
+            pc = d.nnn;
             break;
         case 2:
             stack.push(pc);
@@ -48,7 +48,10 @@ void Emulator::execute(DecodedInstruction d) {
             if (registers[d.x] != d.nn) pc += 2;
             break;
         case 5:
-            if (d.n == 0 && registers[d.x] == registers[d.y]) pc += 1;
+            if (d.n == 0 && registers[d.x] == registers[d.y]) pc += 2;
+            break;
+        case 9:
+            if (d.n == 0 && registers[d.x] != registers[d.y]) pc += 1;
             break;
         case 6:
             registers[d.x] = d.nn;
@@ -83,9 +86,6 @@ void Emulator::execute(DecodedInstruction d) {
                 flagRegister = ((registers[d.x] >> 15) & 1 == 1) ? 0 : 1;
                 registers[d.x] <<= 1;
             }
-            break;
-        case 9:
-            if (d.n == 0 && registers[d.x] != registers[d.y]) pc += 1;
             break;
         case 0xA:
             index = d.nnn;
