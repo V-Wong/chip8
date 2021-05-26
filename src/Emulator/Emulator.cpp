@@ -51,7 +51,7 @@ void Emulator::execute(DecodedInstruction d) {
             if (d.n == 0 && registers[d.x] == registers[d.y]) pc += 2;
             break;
         case 9:
-            if (d.n == 0 && registers[d.x] != registers[d.y]) pc += 1;
+            if (d.n == 0 && registers[d.x] != registers[d.y]) pc += 2;
             break;
         case 6:
             registers[d.x] = d.nn;
