@@ -79,13 +79,11 @@ void Emulator::execute(DecodedInstruction d) {
                 registers[d.x] = registers[d.y] - registers[d.x];
             }
             if (d.n == 6) {
-                registers[d.x] = registers[d.y];
-                flagRegister = (registers[d.x] & 1 == 1) ? 0 : 1;
+                flagRegister = registers[d.x] & 1;
                 registers[d.x] >>= 1;
             }
             if (d.n == 0xE) {
-                registers[d.x] = registers[d.y];
-                flagRegister = ((registers[d.x] >> 15) & 1 == 1) ? 0 : 1;
+                flagRegister = registers[d.x] >> 7;
                 registers[d.x] <<= 1;
             }
             break;
