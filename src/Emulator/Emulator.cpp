@@ -67,15 +67,15 @@ void Emulator::execute(DecodedInstruction d) {
             if (d.n == 2) registers[d.x] &= registers[d.y];
             if (d.n == 3) registers[d.x] ^= registers[d.y];
             if (d.n == 4) {
-                flagRegister = ((int)registers[d.x] + registers[d.y] > UINT8_MAX) ? 1 : 0;
+                flagRegister = (registers[d.x] + registers[d.y] > UINT8_MAX) ? 1 : 0;
                 registers[d.x] += registers[d.y];
             }
             if (d.n == 5) {
-                flagRegister = ((int)registers[d.x] > registers[d.y]) ? 1 : 0;
+                flagRegister = (registers[d.x] >= registers[d.y]) ? 1 : 0;
                 registers[d.x] -= registers[d.y];
             }
             if (d.n == 7) {
-                flagRegister = ((int)registers[d.y] > registers[d.x]) ? 1 : 0;
+                flagRegister = (registers[d.y] >= registers[d.x]) ? 1 : 0;
                 registers[d.x] = registers[d.y] - registers[d.x];
             }
             if (d.n == 6) {
