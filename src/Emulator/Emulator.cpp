@@ -75,7 +75,7 @@ void Emulator::execute(DecodedInstruction d) {
                 registers[d.x] -= registers[d.y];
             }
             if (d.n == 7) {
-                flagRegister = ((int)registers[d.x] > registers[d.y]) ? 1 : 0;
+                flagRegister = ((int)registers[d.y] > registers[d.x]) ? 1 : 0;
                 registers[d.x] = registers[d.y] - registers[d.x];
             }
             if (d.n == 6) {
