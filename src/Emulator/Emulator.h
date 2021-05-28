@@ -14,7 +14,7 @@ class Emulator {
 public:
     Emulator(std::vector<uint8_t> program): memory{}, stack{} {
         load(0x200, program);
-        load(0x50, FONTS);
+        load(0x00, FONTS);
     };
     void load(uint16_t start, std::vector<uint8_t> bytes);
     void run(void);
@@ -23,12 +23,12 @@ public:
     void keyUnpress(int key) { keysPressed[key] = false; };
     bool isDisplayUpdated() { return displayUpdated; };
 private:
-    uint16_t pc;
+    uint16_t pc = 0x200;
     uint16_t index;
     uint8_t delayTimer;
     uint8_t soundTimer;
-    uint8_t registers[16];
-    uint8_t& flagRegister = registers[16];
+    uint8_t registers[16] = {0};
+    uint8_t& flagRegister = registers[15];
     bool isBlocked;
 
     Stack stack;

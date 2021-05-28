@@ -17,10 +17,10 @@ void Emulator::load(uint16_t start, std::vector<uint8_t> bytes) {
 
 void Emulator::run(void) {
     uint16_t instruction = fetch();
+    pc += 2;
     displayUpdated = false;
     DecodedInstruction d{instruction};
     execute(d);
-    if (!isBlocked) pc += 2;
 }
 
 uint16_t Emulator::fetch(void) {
@@ -29,13 +29,15 @@ uint16_t Emulator::fetch(void) {
 }
 
 void Emulator::execute(DecodedInstruction d) {
+    if (d.type != 1) std::cout << (int)d.type << " " << (int)d.n << std::endl;
+
     switch (d.type) {
         case 0:
             if (d.nnn == 0xE0) clearDisplay();
             if (d.nnn == 0xEE) pc = stack.pop();
             break;
         case 1:
-            pc = d.nnn - 2;
+            pc = d.nnn;
             break;
         case 2:
             stack.push(pc);
@@ -48,7 +50,10 @@ void Emulator::execute(DecodedInstruction d) {
             if (registers[d.x] != d.nn) pc += 2;
             break;
         case 5:
-            if (d.n == 0 && registers[d.x] == registers[d.y]) pc += 1;
+            if (d.n == 0 && registers[d.x] == registers[d.y]) pc += 2;
+            break;
+        case 9:
+            if (d.n == 0 && registers[d.x] != registers[d.y]) pc += 2;
             break;
         case 6:
             registers[d.x] = d.nn;
@@ -62,15 +67,15 @@ void Emulator::execute(DecodedInstruction d) {
             if (d.n == 2) registers[d.x] &= registers[d.y];
             if (d.n == 3) registers[d.x] ^= registers[d.y];
             if (d.n == 4) {
-                flagRegister = ((int)registers[d.x] + registers[d.y] > UINT8_MAX) ? 1 : 0;
+                flagRegister = (registers[d.x] + registers[d.y] > UINT8_MAX) ? 1 : 0;
                 registers[d.x] += registers[d.y];
             }
             if (d.n == 5) {
-                flagRegister = ((int)registers[d.x] > registers[d.y]) ? 1 : 0;
+                flagRegister = (registers[d.x] >= registers[d.y]) ? 1 : 0;
                 registers[d.x] -= registers[d.y];
             }
             if (d.n == 7) {
-                flagRegister = ((int)registers[d.x] > registers[d.y]) ? 1 : 0;
+                flagRegister = (registers[d.y] >= registers[d.x]) ? 1 : 0;
                 registers[d.x] = registers[d.y] - registers[d.x];
             }
             if (d.n == 6) {
@@ -83,9 +88,6 @@ void Emulator::execute(DecodedInstruction d) {
                 flagRegister = ((registers[d.x] >> 15) & 1 == 1) ? 0 : 1;
                 registers[d.x] <<= 1;
             }
-            break;
-        case 9:
-            if (d.n == 0 && registers[d.x] != registers[d.y]) pc += 1;
             break;
         case 0xA:
             index = d.nnn;
@@ -119,7 +121,7 @@ void Emulator::execute(DecodedInstruction d) {
                     isBlocked = true;
                 }
             }
-            if (d.nn == 0x29) index = registers[d.x] & 0xF;
+            if (d.nn == 0x29) index = registers[d.x] * 5;
             if (d.nn == 0x33) {
                 memory.writeByte(index, (registers[d.x] / 100) % 10);
                 memory.writeByte(index + 1, (registers[d.x] / 10) % 10);
