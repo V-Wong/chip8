@@ -29,6 +29,8 @@ uint16_t Emulator::fetch(void) {
 }
 
 void Emulator::execute(DecodedInstruction d) {
+    if (d.type != 1) std::cout << (int)d.type << " " << (int)d.n << std::endl;
+
     switch (d.type) {
         case 0:
             if (d.nnn == 0xE0) clearDisplay();
@@ -119,7 +121,7 @@ void Emulator::execute(DecodedInstruction d) {
                     isBlocked = true;
                 }
             }
-            if (d.nn == 0x29) index = registers[d.x] & 0xF;
+            if (d.nn == 0x29) index = registers[d.x] * 5;
             if (d.nn == 0x33) {
                 memory.writeByte(index, (registers[d.x] / 100) % 10);
                 memory.writeByte(index + 1, (registers[d.x] / 10) % 10);
