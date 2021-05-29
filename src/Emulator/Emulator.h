@@ -6,8 +6,8 @@
 #include "../Stack/Stack.h"
 #include "../Memory/Memory.h"
 #include "../Display/Display.h"
-#include "DecodedInstruction.h"
-#include "Fonts.h"
+#include "../DecodedInstruction/DecodedInstruction.h"
+#include "../Fonts/Fonts.h"
 
 
 class Emulator {
@@ -22,7 +22,6 @@ public:
     void keyPress(int key) { keysPressed[key] = true; lastPressedKey = key; isBlocked = false; };
     void keyUnpress(int key) { keysPressed[key] = false; };
     bool isDisplayUpdated() { return displayUpdated; };
-    void decrementTimer(void);
 private:
     uint16_t pc = 0x200;
     uint16_t index;
@@ -40,7 +39,11 @@ private:
     uint16_t fetch(void);
     void execute(DecodedInstruction d);
     void updateDisplay(DecodedInstruction d);
+    void writeMemory(DecodedInstruction d);
+    void readMemory(DecodedInstruction d);
+    void convertBinary(DecodedInstruction d);
     void clearDisplay(void);
+    void decrementTimer(void);
 
     bool displayUpdated;
     uint16_t lastPressedKey = -1;
