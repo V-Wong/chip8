@@ -22,12 +22,21 @@ void Emulator::run(void) {
     DecodedInstruction d{instruction};
     execute(d);
     lastPressedKey = -1;
-    if (delayTimer != 0) delayTimer -= 1;
+    decrementTimer();
 }
 
 uint16_t Emulator::fetch(void) {
     uint16_t instruction = joinBytes(memory.getByte(pc), memory.getByte(pc + 1));
     return instruction;
+}
+
+void Emulator::decrementTimer(void) {
+    if (steps % 8 == 0) {
+        delayTimer -= 1;
+        steps = 0;
+    } else {
+        steps += 1;
+    }
 }
 
 void Emulator::execute(DecodedInstruction d) {
