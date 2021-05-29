@@ -19,7 +19,7 @@ public:
     void load(uint16_t start, std::vector<uint8_t> bytes);
     void run(void);
     bool getPixel(uint8_t x, uint8_t y) { return display.getPixel(x, y); };
-    void keyPress(int key) { keysPressed[key] = true; isBlocked = false; };
+    void keyPress(int key) { keysPressed[key] = true; lastPressedKey = key; isBlocked = false; };
     void keyUnpress(int key) { keysPressed[key] = false; };
     bool isDisplayUpdated() { return displayUpdated; };
 private:
@@ -42,6 +42,7 @@ private:
     void clearDisplay(void);
 
     bool displayUpdated;
+    uint16_t lastPressedKey = -1;
 };
 
 

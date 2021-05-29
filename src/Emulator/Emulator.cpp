@@ -21,6 +21,8 @@ void Emulator::run(void) {
     displayUpdated = false;
     DecodedInstruction d{instruction};
     execute(d);
+    lastPressedKey = -1;
+    delayTimer -= 1;
 }
 
 uint16_t Emulator::fetch(void) {
@@ -109,12 +111,8 @@ void Emulator::execute(DecodedInstruction d) {
             if (d.nn == 0x18) soundTimer = registers[d.x];
             if (d.nn == 0x1E) index += registers[d.x];
             if (d.nn == 0xA) {
-                if (isBlocked) {
-                    for (int i = 0; i < 16; i++) {
-                        if (keysPressed[i]) {
-                            registers[d.x] = i;
-                        }
-                    }
+                if (isBlocked && lastPressedKey != -1) {
+                    registers[d.x] = lastPressedKey;
                 } else {
                     isBlocked = true;
                 }

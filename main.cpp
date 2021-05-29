@@ -9,6 +9,7 @@
 #include "src/Memory/Memory.h"
 #include "src/Stack/Stack.h"
 #include "src/Display/Display.h"
+#include "src/Keyboard/Keyboard.h"
 
 constexpr int PIXEL_SIZE = 20;
 
@@ -29,7 +30,16 @@ int main(int, char **) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
     SDL_RenderClear(renderer);
 
-    for (int x = 0; x < 10000; x++) {
+    const uint8_t *keyStates = SDL_GetKeyboardState(NULL);
+    while (true) {
+        SDL_PumpEvents();
+
+        for (auto key : keyMap) {
+            if (keyStates[key.first]) e.keyPress(key.second);
+            else e.keyUnpress(key.second);
+            if (keyStates[key.first]) std::cout << key.first << std::endl;
+        }
+
         if (e.isDisplayUpdated()) {
             for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
                 for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
@@ -45,7 +55,7 @@ int main(int, char **) {
                 }
             }
         }
-    SDL_RenderPresent(renderer);
+        SDL_RenderPresent(renderer);
 
         e.run();
     }
@@ -55,7 +65,7 @@ int main(int, char **) {
 }
 
 std::vector<uint8_t> readProgram() {
-    std::ifstream input("./test.ch8", std::ios::binary);
+    std::ifstream input("./SCTEST.CH8", std::ios::binary);
 
     std::vector<uint8_t> bytes(
          (std::istreambuf_iterator<char>(input)),
