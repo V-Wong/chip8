@@ -1,6 +1,10 @@
 # CHIP-8 Emulator
 ## Overview
-A basic emulator for the CHIP-8 virtual machine written in C++ with Simple DirectMedia Layer (SDL) for graphics rendering.
+A basic emulator for the CHIP-8 virtual machine written in C++ with Simple DirectMedia Layer (SDL) for graphics rendering. 
+
+This is my first C++ project and I used this as an opportunity to learn modern C++ practices. This includes the use of high level C++ abstractions as well utilising automated memory management. However, my limited experience with C++ will definitely show with less than ideal solutions at times. 
+
+Please feel free to pull request any improvements you see.
 
 ### Features
 - Replication of the CHIP-8 instruction set architecture.
