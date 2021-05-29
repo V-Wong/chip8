@@ -13,8 +13,13 @@
 #include "src/Parser/Parser.h"
 
 
-int main(int, char **) {
-    Emulator e(Parser::readProgram("pong.rom"));
+int main(int argc, char **argv) {
+    if (argc != 2) {
+        printf("Usage: %s <rom>\n", argv[0]);
+        exit(1);
+    }
+
+    Emulator e(Parser::readProgram(argv[1]));
     GUI gui;
 
     while (true) {
