@@ -17,6 +17,9 @@ public:
     void pumpEvents(void);
     const uint8_t isKeyPressed(int scancode) { return keyboardState[scancode]; };
     void drawPixel(int x, int y, int r, int g, int b);
+
+    bool hasExit(void);
+    void closeWindow(void);
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;

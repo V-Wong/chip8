@@ -24,6 +24,7 @@ int main(int argc, char **argv) {
 
     while (true) {
         gui.pumpEvents();
+        if (gui.hasExit()) break;
 
         for (auto key : keyMap) {
             if (gui.isKeyPressed(key.first)) e.keyPress(key.second);
@@ -44,4 +45,6 @@ int main(int argc, char **argv) {
 
         e.run();
     }
+
+    gui.closeWindow();
 }
