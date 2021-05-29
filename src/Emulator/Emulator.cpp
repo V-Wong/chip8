@@ -10,17 +10,15 @@ uint16_t joinBytes(uint8_t msb, uint8_t lsb) {
 }
 
 void Emulator::load(uint16_t start, std::vector<uint8_t> bytes) {
-    for (int i = 0; i < bytes.size(); i++) {
+    for (int i = 0; i < bytes.size(); i++)
         memory.writeByte(start + i, bytes.at(i));
-    }
 }
 
 void Emulator::run(void) {
     uint16_t instruction = fetch();
     pc += 2;
     displayUpdated = false;
-    DecodedInstruction d{instruction};
-    execute(d);
+    execute({instruction});
     lastPressedKey = -1;
     decrementTimer();
 }
@@ -76,15 +74,15 @@ void Emulator::execute(DecodedInstruction d) {
             if (d.n == 2) registers[d.x] &= registers[d.y];
             if (d.n == 3) registers[d.x] ^= registers[d.y];
             if (d.n == 4) {
-                flagRegister = (registers[d.x] + registers[d.y] > UINT8_MAX) ? 1 : 0;
+                flagRegister = registers[d.x] + registers[d.y] > UINT8_MAX;
                 registers[d.x] += registers[d.y];
             }
             if (d.n == 5) {
-                flagRegister = (registers[d.x] >= registers[d.y]) ? 1 : 0;
+                flagRegister = registers[d.x] >= registers[d.y];
                 registers[d.x] -= registers[d.y];
             }
             if (d.n == 7) {
-                flagRegister = (registers[d.y] >= registers[d.x]) ? 1 : 0;
+                flagRegister = registers[d.y] >= registers[d.x];
                 registers[d.x] = registers[d.y] - registers[d.x];
             }
             if (d.n == 6) {
@@ -118,11 +116,10 @@ void Emulator::execute(DecodedInstruction d) {
             if (d.nn == 0x18) soundTimer = registers[d.x];
             if (d.nn == 0x1E) index += registers[d.x];
             if (d.nn == 0xA) {
-                if (isBlocked && lastPressedKey != -1) {
+                if (isBlocked && lastPressedKey != -1)
                     registers[d.x] = lastPressedKey;
-                } else {
+                else
                     isBlocked = true;
-                }
             }
             if (d.nn == 0x29) index = registers[d.x] * 5;
             if (d.nn == 0x33) {
@@ -141,45 +138,34 @@ void Emulator::execute(DecodedInstruction d) {
 }
 
 void Emulator::updateDisplay(DecodedInstruction d) {
-    uint8_t xCoordinate = registers[d.x] % 64;
-    uint8_t yCoordinate = registers[d.y] % 32;
+    uint8_t xCoordinate = registers[d.x] % DisplaySpecs::PIXEL_WIDTH;
+    uint8_t yCoordinate = registers[d.y] % DisplaySpecs::PIXEL_HEIGHT;
     flagRegister = 0;
 
     for (int i = 0; i < d.n; i++) {
         uint8_t spriteData = memory.getByte(index + i);
 
-        xCoordinate = registers[d.x] % 64;
+        xCoordinate = registers[d.x] % DisplaySpecs::PIXEL_WIDTH;
         for (int j = 0; j < 8; j++) {
-            bool bitSet = (spriteData >> (8 - j - 1)) & 1;
+            bool isBitSet = (spriteData >> (8 - j - 1)) & 1;
 
-            if (bitSet) {
-                if (display.getPixel(xCoordinate, yCoordinate)) {
-                    display.flip(xCoordinate, yCoordinate);
-                    flagRegister = 1;
-                } else {
-                    display.flip(xCoordinate, yCoordinate);
-                    flagRegister = 0;
-                }
-
+            if (isBitSet) {
+                display.flip(xCoordinate, yCoordinate);
+                flagRegister = display.getPixel(xCoordinate, yCoordinate);
                 displayUpdated = true;
             }
 
-            if (xCoordinate == DisplaySpecs::PIXEL_WIDTH - 1)
-                break;
+            if (xCoordinate == DisplaySpecs::PIXEL_WIDTH - 1) break;
             xCoordinate += 1;
         }
 
         yCoordinate += 1;
-
-        if (yCoordinate == DisplaySpecs::PIXEL_HEIGHT - 1)
-            break;
+        if (yCoordinate == DisplaySpecs::PIXEL_HEIGHT - 1) break;
     }
 }
 
 void Emulator::clearDisplay(void) {
-    for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
-        for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
+    for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++)
+        for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++)
             display.unset(i, j);
-        }
-    }
 }
