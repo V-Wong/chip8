@@ -22,6 +22,7 @@ public:
     void keyPress(int key) { keysPressed[key] = true; lastPressedKey = key; isBlocked = false; };
     void keyUnpress(int key) { keysPressed[key] = false; };
     bool isDisplayUpdated() { return displayUpdated; };
+    void decrementTimer(void);
 private:
     uint16_t pc = 0x200;
     uint16_t index;
@@ -43,6 +44,7 @@ private:
 
     bool displayUpdated;
     uint16_t lastPressedKey = -1;
+    uint16_t steps = 0;
 };
 
 
