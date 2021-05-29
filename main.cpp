@@ -10,6 +10,7 @@
 #include "src/Stack/Stack.h"
 #include "src/Display/Display.h"
 #include "src/Keyboard/Keyboard.h"
+#include "src/GUI/GUI.h"
 
 constexpr int PIXEL_SIZE = 20;
 
@@ -17,53 +18,30 @@ std::vector<uint8_t> readProgram();
 
 int main(int, char **) {
     Emulator e(readProgram());
+    GUI gui;
 
-    SDL_Init(SDL_INIT_VIDEO);
-
-    SDL_Window* window = SDL_CreateWindow(
-        "chip8", 
-        100, 100, 
-        DisplaySpecs::PIXEL_WIDTH * PIXEL_SIZE, DisplaySpecs::PIXEL_HEIGHT * PIXEL_SIZE, 
-        SDL_WINDOW_SHOWN
-    );
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-
-    const uint8_t *keyStates = SDL_GetKeyboardState(NULL);
     while (true) {
-        SDL_PumpEvents();
+        gui.pumpEvents();
 
         for (auto key : keyMap) {
-            if (keyStates[key.first]) e.keyPress(key.second);
+            if (gui.isKeyPressed(key.first)) e.keyPress(key.second);
             else e.keyUnpress(key.second);
         }
 
         if (e.isDisplayUpdated()) {
             for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
                 for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
-                    SDL_Rect r;
-                    r.x = i * PIXEL_SIZE;
-                    r.y = j * PIXEL_SIZE;
-                    r.w = r.h = PIXEL_SIZE;
-
-                    if (e.getPixel(i, j)) {
-                        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-                        SDL_RenderFillRect(renderer, &r);
-                    } else {
-                        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-                        SDL_RenderFillRect(renderer, &r);
-                    }
+                    if (e.getPixel(i, j)) 
+                        gui.drawPixel(i, j, 0, 0, 255);
+                    else
+                        gui.drawPixel(i, j, 0, 0, 0);
                 }
             }
+            gui.render();
         }
-        SDL_Delay(5);
-        SDL_RenderPresent(renderer);
 
         e.run();
     }
-
-    SDL_DestroyWindow(window);
-    SDL_Quit();
 }
 
 std::vector<uint8_t> readProgram() {
