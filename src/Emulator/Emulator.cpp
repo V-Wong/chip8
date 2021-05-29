@@ -3,7 +3,6 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include "DecodedInstruction.h"
 
 uint16_t joinBytes(uint8_t msb, uint8_t lsb) {
     return ((uint16_t)msb << 8) | lsb;

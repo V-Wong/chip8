@@ -6,8 +6,8 @@
 #include "../Stack/Stack.h"
 #include "../Memory/Memory.h"
 #include "../Display/Display.h"
-#include "DecodedInstruction.h"
-#include "Fonts.h"
+#include "../DecodedInstruction/DecodedInstruction.h"
+#include "../Fonts/Fonts.h"
 
 
 class Emulator {
