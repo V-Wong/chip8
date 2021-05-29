@@ -14,7 +14,7 @@
 
 
 int main(int, char **) {
-    Emulator e(Parser::readProgram());
+    Emulator e(Parser::readProgram("pong.rom"));
     GUI gui;
 
     while (true) {
