@@ -22,7 +22,7 @@ void Emulator::run(void) {
     DecodedInstruction d{instruction};
     execute(d);
     lastPressedKey = -1;
-    delayTimer -= 1;
+    if (delayTimer != 0) delayTimer -= 1;
 }
 
 uint16_t Emulator::fetch(void) {
@@ -31,8 +31,6 @@ uint16_t Emulator::fetch(void) {
 }
 
 void Emulator::execute(DecodedInstruction d) {
-    if (d.type != 1) std::cout << (int)d.type << " " << (int)d.n << std::endl;
-
     switch (d.type) {
         case 0:
             if (d.nnn == 0xE0) clearDisplay();
@@ -145,15 +143,15 @@ void Emulator::updateDisplay(DecodedInstruction d) {
         for (int j = 0; j < 8; j++) {
             bool bitSet = (spriteData >> (8 - j - 1)) & 1;
 
-            if (bitSet && display.getPixel(xCoordinate, yCoordinate)) {
-                display.flip(xCoordinate, yCoordinate);
-                flagRegister = 1;
-                displayUpdated = true;
-            }
-            
-            if (bitSet && !display.getPixel(xCoordinate, yCoordinate)) {
-                display.flip(xCoordinate, yCoordinate);
-                flagRegister = 0;
+            if (bitSet) {
+                if (display.getPixel(xCoordinate, yCoordinate)) {
+                    display.flip(xCoordinate, yCoordinate);
+                    flagRegister = 1;
+                } else {
+                    display.flip(xCoordinate, yCoordinate);
+                    flagRegister = 0;
+                }
+
                 displayUpdated = true;
             }
 
