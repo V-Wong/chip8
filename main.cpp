@@ -12,8 +12,6 @@
 #include "src/GUI/GUI.h"
 #include "src/Parser/Parser.h"
 
-constexpr int PIXEL_SIZE = 20;
-
 
 int main(int, char **) {
     Emulator e(Parser::readProgram());
