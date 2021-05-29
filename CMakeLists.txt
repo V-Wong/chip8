@@ -13,7 +13,8 @@ add_executable(
     src/Stack/Stack.cpp src/Stack/Stack.h 
     src/Emulator/Emulator.cpp src/Emulator/Emulator.h 
     src/Display/Display.cpp src/Display/Display.h
-    src/Emulator/Fonts.h 
+    src/Fonts/Fonts.h 
+    src/DecodedInstruction/DecodedInstruction.h
     src/Keyboard/Keyboard.h
     src/GUI/GUI.cpp src/GUI/GUI.h
     src/Parser/Parser.cpp src/Parser/Parser.h
