@@ -37,3 +37,13 @@ void GUI::drawPixel(int x, int y, int red, int green, int blue) {
     SDL_SetRenderDrawColor(renderer, red, green, blue, 255);
     SDL_RenderFillRect(renderer, &r);
 }
+
+bool GUI::hasExit(void) {
+    SDL_Event ev;
+    return (SDL_PollEvent(&ev) != 0 && ev.type == SDL_QUIT) 
+            || (isKeyPressed(SDL_SCANCODE_ESCAPE));
+}
+
+void GUI::closeWindow(void) {
+    SDL_DestroyWindow(window);
+}

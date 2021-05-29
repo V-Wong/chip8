@@ -13,12 +13,18 @@
 #include "src/Parser/Parser.h"
 
 
-int main(int, char **) {
-    Emulator e(Parser::readProgram("pong.rom"));
+int main(int argc, char **argv) {
+    if (argc != 2) {
+        printf("Usage: %s <rom>\n", argv[0]);
+        exit(1);
+    }
+
+    Emulator e(Parser::readProgram(argv[1]));
     GUI gui;
 
     while (true) {
         gui.pumpEvents();
+        if (gui.hasExit()) break;
 
         for (auto key : keyMap) {
             if (gui.isKeyPressed(key.first)) e.keyPress(key.second);
@@ -39,4 +45,6 @@ int main(int, char **) {
 
         e.run();
     }
+
+    gui.closeWindow();
 }
