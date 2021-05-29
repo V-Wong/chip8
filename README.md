@@ -6,6 +6,9 @@ A basic emulator for the CHIP-8 virtual machine written in C++ with Simple Direc
 - Replication of the CHIP-8 instruction set architecture.
 - Cross-platform rendering of graphics using SDL.
 
+### Image of Program
+![](./cover.png)
+
 ## Quick Start
 ### Dependencies
 This project relies on the SDL graphics library. Run the following commands (or your distro's equivalent) to download these dependencies:
