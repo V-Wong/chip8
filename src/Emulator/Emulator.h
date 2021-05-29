@@ -39,6 +39,9 @@ private:
     uint16_t fetch(void);
     void execute(DecodedInstruction d);
     void updateDisplay(DecodedInstruction d);
+    void writeMemory(DecodedInstruction d);
+    void readMemory(DecodedInstruction d);
+    void convertBinary(DecodedInstruction d);
     void clearDisplay(void);
     void decrementTimer(void);
 

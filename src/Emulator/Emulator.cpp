@@ -122,17 +122,9 @@ void Emulator::execute(DecodedInstruction d) {
                     isBlocked = true;
             }
             if (d.nn == 0x29) index = registers[d.x] * 5;
-            if (d.nn == 0x33) {
-                memory.writeByte(index, (registers[d.x] / 100) % 10);
-                memory.writeByte(index + 1, (registers[d.x] / 10) % 10);
-                memory.writeByte(index + 2, registers[d.x] % 10);
-            }
-            if (d.nn == 0x55)
-                for (int i = 0; i <= d.x; i++)
-                    memory.writeByte(index + i, registers[i]);
-            if (d.nn == 0x65)
-                for (int i = 0; i <= d.x; i++)
-                    registers[i] = memory.getByte(index + i);
+            if (d.nn == 0x33) convertBinary(d);
+            if (d.nn == 0x55) writeMemory(d);
+            if (d.nn == 0x65) readMemory(d);
             break;
     }
 }
@@ -168,4 +160,20 @@ void Emulator::clearDisplay(void) {
     for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++)
         for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++)
             display.unset(i, j);
+}
+
+void Emulator::writeMemory(DecodedInstruction d) {
+    for (int i = 0; i <= d.x; i++)
+        memory.writeByte(index + i, registers[i]);
+}
+
+void Emulator::readMemory(DecodedInstruction d) {
+    for (int i = 0; i <= d.x; i++)
+        registers[i] = memory.getByte(index + i);
+}
+
+void Emulator::convertBinary(DecodedInstruction d) {
+    memory.writeByte(index, (registers[d.x] / 100) % 10);
+    memory.writeByte(index + 1, (registers[d.x] / 10) % 10);
+    memory.writeByte(index + 2, registers[d.x] % 10);
 }
