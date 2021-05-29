@@ -12,6 +12,7 @@ add_executable(
     src/Stack/Stack.cpp src/Stack/Stack.h src/Emulator/Emulator.cpp 
     src/Emulator/Emulator.h src/Display/Display.cpp src/Display/Display.h
     src/Emulator/Fonts.h src/Keyboard/Keyboard.h
+    src/GUI/GUI.h src/GUI/GUI.cpp
 )
 target_link_libraries(chip8 ${SDL2_LIBRARIES})
 
