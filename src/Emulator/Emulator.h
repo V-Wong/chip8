@@ -25,7 +25,7 @@ public:
 private:
     uint16_t pc = 0x200;
     uint16_t index;
-    uint8_t delayTimer;
+    uint8_t delayTimer = UINT8_MAX;
     uint8_t soundTimer;
     uint8_t registers[16] = {0};
     uint8_t& flagRegister = registers[15];

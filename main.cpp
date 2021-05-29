@@ -28,7 +28,6 @@ int main(int, char **) {
     );
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-    SDL_RenderClear(renderer);
 
     const uint8_t *keyStates = SDL_GetKeyboardState(NULL);
     while (true) {
@@ -37,24 +36,27 @@ int main(int, char **) {
         for (auto key : keyMap) {
             if (keyStates[key.first]) e.keyPress(key.second);
             else e.keyUnpress(key.second);
-            if (keyStates[key.first]) std::cout << key.first << std::endl;
         }
 
         if (e.isDisplayUpdated()) {
             for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
                 for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
-                    if (e.getPixel(i, j)) {
-                        SDL_Rect r;
-                        r.x = i * PIXEL_SIZE;
-                        r.y = j * PIXEL_SIZE;
-                        r.w = r.h = PIXEL_SIZE;
+                    SDL_Rect r;
+                    r.x = i * PIXEL_SIZE;
+                    r.y = j * PIXEL_SIZE;
+                    r.w = r.h = PIXEL_SIZE;
 
+                    if (e.getPixel(i, j)) {
                         SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                        SDL_RenderFillRect(renderer, &r);
+                    } else {
+                        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
                         SDL_RenderFillRect(renderer, &r);
                     }
                 }
             }
         }
+        SDL_Delay(5);
         SDL_RenderPresent(renderer);
 
         e.run();
@@ -65,7 +67,7 @@ int main(int, char **) {
 }
 
 std::vector<uint8_t> readProgram() {
-    std::ifstream input("./SCTEST.CH8", std::ios::binary);
+    std::ifstream input("./pong.rom", std::ios::binary);
 
     std::vector<uint8_t> bytes(
          (std::istreambuf_iterator<char>(input)),
