@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <iterator>
 #include <vector>
 
@@ -11,13 +10,13 @@
 #include "src/Display/Display.h"
 #include "src/Keyboard/Keyboard.h"
 #include "src/GUI/GUI.h"
+#include "src/Parser/Parser.h"
 
 constexpr int PIXEL_SIZE = 20;
 
-std::vector<uint8_t> readProgram();
 
 int main(int, char **) {
-    Emulator e(readProgram());
+    Emulator e(Parser::readProgram());
     GUI gui;
 
     while (true) {
@@ -42,17 +41,4 @@ int main(int, char **) {
 
         e.run();
     }
-}
-
-std::vector<uint8_t> readProgram() {
-    std::ifstream input("./pong.rom", std::ios::binary);
-
-    std::vector<uint8_t> bytes(
-         (std::istreambuf_iterator<char>(input)),
-         (std::istreambuf_iterator<char>())
-    );
-
-    input.close();
-
-    return bytes;
 }
