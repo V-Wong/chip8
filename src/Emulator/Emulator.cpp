@@ -6,6 +6,7 @@
 #include "../OPCodes/OPCodes.h"
 
 constexpr int BYTE_SIZE = 8;
+constexpr int INSTRUCTION_INCREMENT = 2;
 
 
 uint16_t joinBytes(uint8_t msb, uint8_t lsb) {
@@ -19,7 +20,7 @@ void Emulator::load(uint16_t start, std::vector<uint8_t> bytes) {
 
 void Emulator::run(void) {
     uint16_t instruction = fetch();
-    pc += 2;
+    pc += INSTRUCTION_INCREMENT;
     displayUpdated = false;
     execute({instruction});
     lastPressedKey = -1;
@@ -57,16 +58,16 @@ void Emulator::execute(DecodedInstruction d) {
             pc = d.nnn;
             break;
         case OPCodes::X_EQ_NN_PC_INC:
-            if (registers[d.x] == d.nn) pc += 2;
+            if (registers[d.x] == d.nn) pc += INSTRUCTION_INCREMENT;
             break;
         case OPCodes::X_NEQ_NN_PC_INC:
-            if (registers[d.x] != d.nn) pc += 2;
+            if (registers[d.x] != d.nn) pc += INSTRUCTION_INCREMENT;
             break;
         case OPCodes::X_EQ_Y_PC_INC:
-            if (d.n == 0 && registers[d.x] == registers[d.y]) pc += 2;
+            if (d.n == 0 && registers[d.x] == registers[d.y]) pc += INSTRUCTION_INCREMENT;
             break;
         case OPCodes::X_NEQ_Y_PC_INC:
-            if (d.n == 0 && registers[d.x] != registers[d.y]) pc += 2;
+            if (d.n == 0 && registers[d.x] != registers[d.y]) pc += INSTRUCTION_INCREMENT;
             break;
         case OPCodes::SET_X_NN:
             registers[d.x] = d.nn;
@@ -113,8 +114,10 @@ void Emulator::execute(DecodedInstruction d) {
             updateDisplay(d);
             break;
         case OPCodes::READ_KEY:
-            if (d.nn == OPCodes::KEY_PRESSED && keysPressed[registers[d.x]]) pc += 2;
-            if (d.nn == OPCodes::KEY_NPRESSED && !keysPressed[registers[d.x]]) pc += 2;
+            if (d.nn == OPCodes::KEY_PRESSED && keysPressed[registers[d.x]]) 
+                pc += INSTRUCTION_INCREMENT;
+            if (d.nn == OPCodes::KEY_NPRESSED && !keysPressed[registers[d.x]]) 
+                pc += INSTRUCTION_INCREMENT;
             break;
         case OPCodes::OTHER:
             if (d.nn == OPCodes::SET_X_EQ_DELAY) registers[d.x] = delayTimer;
