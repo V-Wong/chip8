@@ -40,7 +40,10 @@ void Emulator::execute(DecodedInstruction d) {
     switch (d.type) {
         case 0:
             if (d.nnn == 0xE0) clearDisplay();
-            if (d.nnn == 0xEE) pc = stack.pop();
+            if (d.nnn == 0xEE) {
+                pc = stack.top();
+                stack.pop();
+            }
             break;
         case 1:
             pc = d.nnn;

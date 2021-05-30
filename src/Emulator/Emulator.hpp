@@ -2,8 +2,8 @@
 #define CHIP8_EMULATOR_H
 
 #include <cstdint>
+#include <stack>
 
-#include "../Stack/Stack.hpp"
 #include "../Memory/Memory.hpp"
 #include "../Display/Display.hpp"
 #include "../DecodedInstruction/DecodedInstruction.hpp"
@@ -31,7 +31,7 @@ private:
     uint8_t& flagRegister = registers[15];
     bool isBlocked;
 
-    Stack stack;
+    std::stack<uint16_t> stack;
     Memory memory;
     Display display;
     bool keysPressed[16];
