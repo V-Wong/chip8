@@ -9,15 +9,14 @@ include_directories(${SDL2_INCLUDE_DIRS})
 
 add_executable(
     chip8 main.cpp 
-    src/Memory/Memory.cpp src/Memory/Memory.h 
-    src/Stack/Stack.cpp src/Stack/Stack.h 
-    src/Emulator/Emulator.cpp src/Emulator/Emulator.h 
-    src/Display/Display.cpp src/Display/Display.h
-    src/Fonts/Fonts.h 
-    src/DecodedInstruction/DecodedInstruction.h
-    src/Keyboard/Keyboard.h
-    src/GUI/GUI.cpp src/GUI/GUI.h
-    src/Parser/Parser.cpp src/Parser/Parser.h
+    src/Memory/Memory.cpp src/Memory/Memory.hpp
+    src/Emulator/Emulator.cpp src/Emulator/Emulator.hpp
+    src/Display/Display.cpp src/Display/Display.hpp
+    src/Fonts/Fonts.hpp
+    src/DecodedInstruction/DecodedInstruction.hpp
+    src/Keyboard/Keyboard.hpp
+    src/GUI/GUI.cpp src/GUI/GUI.hpp
+    src/Parser/Parser.cpp src/Parser/Parser.hpp
 )
 target_link_libraries(chip8 ${SDL2_LIBRARIES})
 
