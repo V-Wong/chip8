@@ -45,7 +45,7 @@ void Emulator::execute(DecodedInstruction d) {
     switch (d.type) {
         case OPCodes::INITIAL:
             if (d.nnn == OPCodes::CLEAR_DISPLAY) clearDisplay();
-            if (d.nnn == 0xEE) {
+            if (d.nnn == OPCodes::POP_PC) {
                 pc = stack.top();
                 stack.pop();
             }
