@@ -5,9 +5,11 @@
 
 #include "../OPCodes/OPCodes.h"
 
+constexpr int BYTE_SIZE = 8;
+
 
 uint16_t joinBytes(uint8_t msb, uint8_t lsb) {
-    return ((uint16_t)msb << 8) | lsb;
+    return ((uint16_t)msb << BYTE_SIZE) | lsb;
 }
 
 void Emulator::load(uint16_t start, std::vector<uint8_t> bytes) {
@@ -94,7 +96,7 @@ void Emulator::execute(DecodedInstruction d) {
                 registers[d.x] >>= 1;
             }
             if (d.n == OPCodes::SET_X_LSHIFT) {
-                flagRegister = registers[d.x] >> 7;
+                flagRegister = registers[d.x] >> (BYTE_SIZE - 1);
                 registers[d.x] <<= 1;
             }
             break;
@@ -142,8 +144,8 @@ void Emulator::updateDisplay(DecodedInstruction d) {
         uint8_t spriteData = memory.getByte(index + i);
 
         xCoordinate = registers[d.x] % DisplaySpecs::PIXEL_WIDTH;
-        for (int j = 0; j < 8; j++) {
-            bool isBitSet = (spriteData >> (8 - j - 1)) & 1;
+        for (int j = 0; j < BYTE_SIZE; j++) {
+            bool isBitSet = (spriteData >> (BYTE_SIZE - j - 1)) & 1;
 
             if (isBitSet) {
                 display.flip(xCoordinate, yCoordinate);
