@@ -1,9 +1,8 @@
-#ifndef CHIP8_MEMORY_H
-#define CHIP8_MEMORY_H
-
+#pragma once
 
 #include <cstdint>
 #include <array>
+
 
 constexpr int MEMORY_LIMIT = 4096;
 
@@ -15,6 +14,3 @@ public:
 private:
     std::array<std::uint8_t, MEMORY_LIMIT> memory;
 };
-
-
-#endif //CHIP8_MEMORY_H

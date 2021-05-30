@@ -1,5 +1,4 @@
-#ifndef CHIP8_GUI_H
-#define CHIP8_GUI_H
+#pragma once
 
 #include "SDL.h"
 
@@ -28,5 +27,3 @@ private:
     SDL_Window* createWindow(void);
     SDL_Renderer* createRenderer(void);
 };
-
-#endif //CHIP8_GUI_H

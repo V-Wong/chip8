@@ -1,5 +1,4 @@
-#ifndef CHIP8_KEYBOARD_H
-#define CHIP8_KEYBOARD_H
+#pragma once
 
 #include <map>
 #include <SDL.h>
@@ -11,5 +10,3 @@ std::map<int, int> keyMap = {
     {SDL_SCANCODE_A, 7}, {SDL_SCANCODE_S, 8}, {SDL_SCANCODE_D, 9}, {SDL_SCANCODE_F, 0xE},
     {SDL_SCANCODE_Z, 0xA}, {SDL_SCANCODE_X, 0}, {SDL_SCANCODE_C, 0xB}, {SDL_SCANCODE_V, 0xF}
 };
-
-#endif //CHIP8_KEYBOARD_H

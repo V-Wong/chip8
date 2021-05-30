@@ -1,5 +1,4 @@
-#ifndef CHIP8_EMULATOR_H
-#define CHIP8_EMULATOR_H
+#pragma once
 
 #include <cstdint>
 #include <stack>
@@ -49,6 +48,3 @@ private:
     uint16_t lastPressedKey = -1;
     uint16_t steps = 0;
 };
-
-
-#endif //CHIP8_EMULATOR_H

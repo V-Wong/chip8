@@ -1,5 +1,4 @@
-#ifndef CHIP8_PARSER_H
-#define CHIP8_PARSER_H
+#pragma once
 
 #include "stdint.h"
 #include <vector>
@@ -9,5 +8,3 @@
 namespace Parser {
     std::vector<uint8_t> readProgram(std::string filePath);
 }
-
-#endif //CHIP8_PARSER_H

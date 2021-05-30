@@ -1,5 +1,4 @@
-#ifndef CHIP8_DISPLAY_H
-#define CHIP8_DISPLAY_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -24,6 +23,3 @@ public:
 private:
     std::vector<std::vector<bool>> pixels;
 };
-
-
-#endif //CHIP8_DISPLAY_H

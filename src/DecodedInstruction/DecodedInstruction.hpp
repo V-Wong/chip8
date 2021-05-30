@@ -1,5 +1,4 @@
-#ifndef CHIP8_DECODED_INSTRUCTION_H
-#define CHIP8_DECODED_INSTRUCTION_H
+#pragma once
 
 #include <cstdint>
 
@@ -21,6 +20,3 @@ struct DecodedInstruction {
     uint8_t nn;
     uint16_t nnn;
 };
-
-
-#endif //CHIP8_DECODED_INSTRUCTION_H
