@@ -3,11 +3,11 @@
 
 #include <cstdint>
 
-#include "../Stack/Stack.h"
-#include "../Memory/Memory.h"
-#include "../Display/Display.h"
-#include "../DecodedInstruction/DecodedInstruction.h"
-#include "../Fonts/Fonts.h"
+#include "../Stack/Stack.hpp"
+#include "../Memory/Memory.hpp"
+#include "../Display/Display.hpp"
+#include "../DecodedInstruction/DecodedInstruction.hpp"
+#include "../Fonts/Fonts.hpp"
 
 
 class Emulator {

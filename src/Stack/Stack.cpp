@@ -1,4 +1,4 @@
-#include "Stack.h"
+#include "Stack.hpp"
 
 void Stack::push(std::uint16_t value) {
     stack.push_back(value);
