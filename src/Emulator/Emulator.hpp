@@ -1,13 +1,12 @@
-#ifndef CHIP8_EMULATOR_H
-#define CHIP8_EMULATOR_H
+#pragma once
 
 #include <cstdint>
+#include <stack>
 
-#include "../Stack/Stack.h"
-#include "../Memory/Memory.h"
-#include "../Display/Display.h"
-#include "../DecodedInstruction/DecodedInstruction.h"
-#include "../Fonts/Fonts.h"
+#include "../Memory/Memory.hpp"
+#include "../Display/Display.hpp"
+#include "../DecodedInstruction/DecodedInstruction.hpp"
+#include "../Fonts/Fonts.hpp"
 
 
 class Emulator {
@@ -31,7 +30,7 @@ private:
     uint8_t& flagRegister = registers[15];
     bool isBlocked;
 
-    Stack stack;
+    std::stack<uint16_t> stack;
     Memory memory;
     Display display;
     bool keysPressed[16];
@@ -49,6 +48,3 @@ private:
     uint16_t lastPressedKey = -1;
     uint16_t steps = 0;
 };
-
-
-#endif //CHIP8_EMULATOR_H

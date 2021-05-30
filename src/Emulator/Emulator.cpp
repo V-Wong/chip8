@@ -1,11 +1,16 @@
-#include "Emulator.h"
+#include "Emulator.hpp"
 
 #include <iostream>
 #include <stdlib.h>
 
+#include "../OPCodes/OPCodes.h"
+
+constexpr int BYTE_SIZE = 8;
+constexpr int INSTRUCTION_INCREMENT = 2;
+
 
 uint16_t joinBytes(uint8_t msb, uint8_t lsb) {
-    return ((uint16_t)msb << 8) | lsb;
+    return ((uint16_t)msb << BYTE_SIZE) | lsb;
 }
 
 void Emulator::load(uint16_t start, std::vector<uint8_t> bytes) {
@@ -15,7 +20,7 @@ void Emulator::load(uint16_t start, std::vector<uint8_t> bytes) {
 
 void Emulator::run(void) {
     uint16_t instruction = fetch();
-    pc += 2;
+    pc += INSTRUCTION_INCREMENT;
     displayUpdated = false;
     execute({instruction});
     lastPressedKey = -1;
@@ -38,92 +43,97 @@ void Emulator::decrementTimer(void) {
 
 void Emulator::execute(DecodedInstruction d) {
     switch (d.type) {
-        case 0:
-            if (d.nnn == 0xE0) clearDisplay();
-            if (d.nnn == 0xEE) pc = stack.pop();
+        case OPCodes::INITIAL:
+            if (d.nnn == OPCodes::CLEAR_DISPLAY) clearDisplay();
+            if (d.nnn == OPCodes::POP_PC) {
+                pc = stack.top();
+                stack.pop();
+            }
             break;
-        case 1:
+        case OPCodes::SET_PC_EQ_NNN:
             pc = d.nnn;
             break;
-        case 2:
+        case OPCodes::PUSH_PC:
             stack.push(pc);
             pc = d.nnn;
             break;
-        case 3:
-            if (registers[d.x] == d.nn) pc += 2;
+        case OPCodes::X_EQ_NN_PC_INC:
+            if (registers[d.x] == d.nn) pc += INSTRUCTION_INCREMENT;
             break;
-        case 4:
-            if (registers[d.x] != d.nn) pc += 2;
+        case OPCodes::X_NEQ_NN_PC_INC:
+            if (registers[d.x] != d.nn) pc += INSTRUCTION_INCREMENT;
             break;
-        case 5:
-            if (d.n == 0 && registers[d.x] == registers[d.y]) pc += 2;
+        case OPCodes::X_EQ_Y_PC_INC:
+            if (d.n == 0 && registers[d.x] == registers[d.y]) pc += INSTRUCTION_INCREMENT;
             break;
-        case 9:
-            if (d.n == 0 && registers[d.x] != registers[d.y]) pc += 2;
+        case OPCodes::X_NEQ_Y_PC_INC:
+            if (d.n == 0 && registers[d.x] != registers[d.y]) pc += INSTRUCTION_INCREMENT;
             break;
-        case 6:
+        case OPCodes::SET_X_NN:
             registers[d.x] = d.nn;
             break;
-        case 7:
+        case OPCodes::ADD_X_NN:
             registers[d.x] += d.nn;
             break;
-        case 8:
-            if (d.n == 0) registers[d.x] = registers[d.y];
-            if (d.n == 1) registers[d.x] |= registers[d.y];
-            if (d.n == 2) registers[d.x] &= registers[d.y];
-            if (d.n == 3) registers[d.x] ^= registers[d.y];
-            if (d.n == 4) {
+        case OPCodes::ARITH_LOGIC:
+            if (d.n == OPCodes::SET_X_EQ_Y) registers[d.x] = registers[d.y];
+            if (d.n == OPCodes::SET_X_OR_Y) registers[d.x] |= registers[d.y];
+            if (d.n == OPCodes::SET_X_AND_Y) registers[d.x] &= registers[d.y];
+            if (d.n == OPCodes::SET_X_XOR_Y) registers[d.x] ^= registers[d.y];
+            if (d.n == OPCodes::SET_X_ADD_Y) {
                 flagRegister = registers[d.x] + registers[d.y] > UINT8_MAX;
                 registers[d.x] += registers[d.y];
             }
-            if (d.n == 5) {
+            if (d.n == OPCodes::SET_X_SUB_Y) {
                 flagRegister = registers[d.x] >= registers[d.y];
                 registers[d.x] -= registers[d.y];
             }
-            if (d.n == 7) {
+            if (d.n == OPCodes::SET_X_EQ_Y_SUB_X) {
                 flagRegister = registers[d.y] >= registers[d.x];
                 registers[d.x] = registers[d.y] - registers[d.x];
             }
-            if (d.n == 6) {
+            if (d.n == OPCodes::SET_X_RSHIFT) {
                 flagRegister = registers[d.x] & 1;
                 registers[d.x] >>= 1;
             }
-            if (d.n == 0xE) {
-                flagRegister = registers[d.x] >> 7;
+            if (d.n == OPCodes::SET_X_LSHIFT) {
+                flagRegister = registers[d.x] >> (BYTE_SIZE - 1);
                 registers[d.x] <<= 1;
             }
             break;
-        case 0xA:
+        case OPCodes::SET_IDX_NN:
             index = d.nnn;
             break;
-        case 0xB:
+        case OPCodes::SET_PC_EQ_V0_ADD_NNN:
             pc = d.nnn + registers[0];
             break;
-        case 0xC:
+        case OPCodes::RAND_INT:
             registers[d.x] = (rand() % 0xffff) & d.nn;
             break;
-        case 0xD:
+        case OPCodes::DRAW:
             updateDisplay(d);
             break;
-        case 0xE:
-            if (d.nn == 0x9E && keysPressed[registers[d.x]]) pc += 2;
-            if (d.nn == 0xA1 && !keysPressed[registers[d.x]]) pc += 2;
+        case OPCodes::READ_KEY:
+            if (d.nn == OPCodes::KEY_PRESSED && keysPressed[registers[d.x]]) 
+                pc += INSTRUCTION_INCREMENT;
+            if (d.nn == OPCodes::KEY_NPRESSED && !keysPressed[registers[d.x]]) 
+                pc += INSTRUCTION_INCREMENT;
             break;
-        case 0xF:
-            if (d.nn == 0x7) registers[d.x] = delayTimer;
-            if (d.nn == 0x15) delayTimer = registers[d.x];
-            if (d.nn == 0x18) soundTimer = registers[d.x];
-            if (d.nn == 0x1E) index += registers[d.x];
-            if (d.nn == 0xA) {
+        case OPCodes::OTHER:
+            if (d.nn == OPCodes::SET_X_EQ_DELAY) registers[d.x] = delayTimer;
+            if (d.nn == OPCodes::SET_DELAY_EQ_X) delayTimer = registers[d.x];
+            if (d.nn == OPCodes::SET_SOUND_EQ_X) soundTimer = registers[d.x];
+            if (d.nn == OPCodes::SET_IDX_ADD_X) index += registers[d.x];
+            if (d.nn == OPCodes::BLOCK_KEY_READ) {
                 if (isBlocked && lastPressedKey != -1)
                     registers[d.x] = lastPressedKey;
                 else
                     isBlocked = true;
             }
-            if (d.nn == 0x29) index = registers[d.x] * 5;
-            if (d.nn == 0x33) convertBinary(d);
-            if (d.nn == 0x55) writeMemory(d);
-            if (d.nn == 0x65) readMemory(d);
+            if (d.nn == OPCodes::SET_IDX_FONT) index = registers[d.x] * 5;
+            if (d.nn == OPCodes::CONVERT_BINARY) convertBinary(d);
+            if (d.nn == OPCodes::WRITE_MEMORY) writeMemory(d);
+            if (d.nn == OPCodes::READ_MEMORY) readMemory(d);
             break;
     }
 }
@@ -137,8 +147,8 @@ void Emulator::updateDisplay(DecodedInstruction d) {
         uint8_t spriteData = memory.getByte(index + i);
 
         xCoordinate = registers[d.x] % DisplaySpecs::PIXEL_WIDTH;
-        for (int j = 0; j < 8; j++) {
-            bool isBitSet = (spriteData >> (8 - j - 1)) & 1;
+        for (int j = 0; j < BYTE_SIZE; j++) {
+            bool isBitSet = (spriteData >> (BYTE_SIZE - j - 1)) & 1;
 
             if (isBitSet) {
                 display.flip(xCoordinate, yCoordinate);

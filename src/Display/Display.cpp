@@ -1,4 +1,4 @@
-#include "Display.h"
+#include "Display.hpp"
 
 void Display::set(uint8_t x, uint8_t y) {
     pixels.at(x).at(y) = true;

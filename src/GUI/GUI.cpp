@@ -1,8 +1,8 @@
-#include "GUI.h"
+#include "GUI.hpp"
 
 #include "SDL.h"
 
-#include "../Display/Display.h"
+#include "../Display/Display.hpp"
 
 constexpr int PIXEL_SIZE = 20;
 

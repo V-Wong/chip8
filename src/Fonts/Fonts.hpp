@@ -1,5 +1,4 @@
-#ifndef CHIP8_FONTS_H
-#define CHIP8_FONTS_H
+#pragma once
 
 #include <vector>
 #include <stdint.h>
@@ -23,6 +22,3 @@ const std::vector<uint8_t> FONTS = {
     0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
-
-
-#endif //CHIP8_FONTS_H
