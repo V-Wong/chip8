@@ -16,6 +16,7 @@ add_executable(
     src/DecodedInstruction/DecodedInstruction.hpp
     src/Keyboard/Keyboard.hpp
     src/GUI/GUI.cpp src/GUI/GUI.hpp
+    src/OPCodes/OPCodes.h
     src/Parser/Parser.cpp src/Parser/Parser.hpp
 )
 target_link_libraries(chip8 ${SDL2_LIBRARIES})
