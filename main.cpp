@@ -4,13 +4,11 @@
 
 #include "SDL.h"
 
-#include "src/Emulator/Emulator.h"
-#include "src/Memory/Memory.h"
-#include "src/Stack/Stack.h"
-#include "src/Display/Display.h"
-#include "src/Keyboard/Keyboard.h"
-#include "src/GUI/GUI.h"
-#include "src/Parser/Parser.h"
+#include "src/Emulator/Emulator.hpp"
+#include "src/Display/Display.hpp"
+#include "src/Keyboard/Keyboard.hpp"
+#include "src/GUI/GUI.hpp"
+#include "src/Parser/Parser.hpp"
 
 
 int main(int argc, char **argv) {
