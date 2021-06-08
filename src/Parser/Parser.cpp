@@ -4,12 +4,13 @@
 
 
 namespace Parser {
-    std::vector<uint8_t> readProgram(std::string filePath) {
-        std::ifstream input(filePath, std::ios::binary);
+    auto readProgram(std::string filePath) -> std::vector<uint8_t> {
+        auto input = std::ifstream(filePath, std::ios::binary);
 
-        std::vector<uint8_t> bytes(
+        auto bytes = std::vector<uint8_t> {
             (std::istreambuf_iterator<char>(input)),
-            (std::istreambuf_iterator<char>()));
+            (std::istreambuf_iterator<char>())
+        };
 
         input.close();
 
