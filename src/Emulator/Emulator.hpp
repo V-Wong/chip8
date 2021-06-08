@@ -13,7 +13,7 @@ class Emulator {
 public:
     Emulator(std::vector<uint8_t> program): memory{}, stack{} {
         load(0x200, program);
-        load(0x00, FONTS);
+        load(0x00, chip8Fonts);
     };
     void load(uint16_t start, std::vector<uint8_t> bytes);
     void run(void);

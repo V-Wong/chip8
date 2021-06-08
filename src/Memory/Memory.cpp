@@ -1,9 +1,9 @@
 #include "Memory.hpp"
 
-std::uint8_t Memory::getByte(std::uint16_t address) {
+auto Memory::getByte(std::uint16_t address) -> std::uint8_t {
     return memory.at(address);
 }
 
-void Memory::writeByte(std::uint16_t address, std::uint8_t value) {
+auto Memory::writeByte(std::uint16_t address, std::uint8_t value) -> void {
     memory.at(address) = value;
 }

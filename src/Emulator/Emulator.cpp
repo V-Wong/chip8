@@ -5,21 +5,21 @@
 
 #include "../OPCodes/OPCodes.h"
 
-constexpr int BYTE_SIZE = 8;
-constexpr int INSTRUCTION_INCREMENT = 2;
+auto constexpr BYTE_SIZE = 8;
+auto constexpr INSTRUCTION_INCREMENT = 2;
 
 
-uint16_t joinBytes(uint8_t msb, uint8_t lsb) {
-    return ((uint16_t)msb << BYTE_SIZE) | lsb;
+auto joinBytes(uint8_t msb, uint8_t lsb) -> uint16_t {
+    return (static_cast<uint16_t>(msb) << BYTE_SIZE) | lsb;
 }
 
-void Emulator::load(uint16_t start, std::vector<uint8_t> bytes) {
-    for (int i = 0; i < bytes.size(); i++)
+auto Emulator::load(uint16_t start, std::vector<uint8_t> bytes) -> void {
+    for (auto i = 0; i < bytes.size(); i++)
         memory.writeByte(start + i, bytes.at(i));
 }
 
-void Emulator::run(void) {
-    uint16_t instruction = fetch();
+auto Emulator::run(void) -> void {
+    auto instruction = fetch();
     pc += INSTRUCTION_INCREMENT;
     displayUpdated = false;
     execute({instruction});
@@ -27,12 +27,12 @@ void Emulator::run(void) {
     decrementTimer();
 }
 
-uint16_t Emulator::fetch(void) {
-    uint16_t instruction = joinBytes(memory.getByte(pc), memory.getByte(pc + 1));
+auto Emulator::fetch(void) -> uint16_t {
+    auto instruction = joinBytes(memory.getByte(pc), memory.getByte(pc + 1));
     return instruction;
 }
 
-void Emulator::decrementTimer(void) {
+auto Emulator::decrementTimer(void) -> void {
     if (steps % 8 == 0) {
         delayTimer -= 1;
         steps = 0;
@@ -41,7 +41,7 @@ void Emulator::decrementTimer(void) {
     }
 }
 
-void Emulator::execute(DecodedInstruction d) {
+auto Emulator::execute(DecodedInstruction d) -> void {
     switch (d.type) {
         case OPCodes::INITIAL:
             if (d.nnn == OPCodes::CLEAR_DISPLAY) clearDisplay();
@@ -138,17 +138,17 @@ void Emulator::execute(DecodedInstruction d) {
     }
 }
 
-void Emulator::updateDisplay(DecodedInstruction d) {
-    uint8_t xCoordinate = registers[d.x] % DisplaySpecs::PIXEL_WIDTH;
-    uint8_t yCoordinate = registers[d.y] % DisplaySpecs::PIXEL_HEIGHT;
+auto Emulator::updateDisplay(DecodedInstruction d) -> void {
+    auto xCoordinate = registers[d.x] % DisplaySpecs::PIXEL_WIDTH;
+    auto yCoordinate = registers[d.y] % DisplaySpecs::PIXEL_HEIGHT;
     flagRegister = 0;
 
-    for (int i = 0; i < d.n; i++) {
+    for (auto i = 0; i < d.n; i++) {
         uint8_t spriteData = memory.getByte(index + i);
 
         xCoordinate = registers[d.x] % DisplaySpecs::PIXEL_WIDTH;
-        for (int j = 0; j < BYTE_SIZE; j++) {
-            bool isBitSet = (spriteData >> (BYTE_SIZE - j - 1)) & 1;
+        for (auto j = 0; j < BYTE_SIZE; j++) {
+            auto isBitSet = (spriteData >> (BYTE_SIZE - j - 1)) & 1;
 
             if (isBitSet) {
                 display.flip(xCoordinate, yCoordinate);
@@ -165,23 +165,23 @@ void Emulator::updateDisplay(DecodedInstruction d) {
     }
 }
 
-void Emulator::clearDisplay(void) {
-    for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++)
-        for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++)
+auto Emulator::clearDisplay(void) -> void {
+    for (auto i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++)
+        for (auto j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++)
             display.unset(i, j);
 }
 
-void Emulator::writeMemory(DecodedInstruction d) {
-    for (int i = 0; i <= d.x; i++)
+auto Emulator::writeMemory(DecodedInstruction d) -> void {
+    for (auto i = 0; i <= d.x; i++)
         memory.writeByte(index + i, registers[i]);
 }
 
-void Emulator::readMemory(DecodedInstruction d) {
-    for (int i = 0; i <= d.x; i++)
+auto Emulator::readMemory(DecodedInstruction d) -> void {
+    for (auto i = 0; i <= d.x; i++)
         registers[i] = memory.getByte(index + i);
 }
 
-void Emulator::convertBinary(DecodedInstruction d) {
+auto Emulator::convertBinary(DecodedInstruction d) -> void {
     memory.writeByte(index, (registers[d.x] / 100) % 10);
     memory.writeByte(index + 1, (registers[d.x] / 10) % 10);
     memory.writeByte(index + 2, registers[d.x] % 10);

@@ -17,8 +17,8 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    Emulator e(Parser::readProgram(argv[1]));
-    GUI gui;
+    auto e = Emulator(Parser::readProgram(argv[1]));
+    auto gui = GUI();
 
     while (true) {
         gui.pumpEvents();
@@ -30,8 +30,8 @@ int main(int argc, char **argv) {
         }
 
         if (e.isDisplayUpdated()) {
-            for (int i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
-                for (int j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
+            for (auto i = 0; i < DisplaySpecs::PIXEL_WIDTH; i++) {
+                for (auto j = 0; j < DisplaySpecs::PIXEL_HEIGHT; j++) {
                     if (e.getPixel(i, j)) 
                         gui.drawPixel(i, j, 0, 0, 255);
                     else
