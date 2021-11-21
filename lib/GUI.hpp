@@ -10,18 +10,18 @@ public:
         keyboardState = SDL_GetKeyboardState(NULL);
     };
     
-    void render(void);
-    void pumpEvents(void);
-    const uint8_t isKeyPressed(int scancode) { return keyboardState[scancode]; };
-    void drawPixel(int x, int y, int r, int g, int b);
+    auto render(void) -> void;
+    auto pumpEvents(void) -> void;
+    auto isKeyPressed(int scancode) -> uint8_t { return keyboardState[scancode]; };
+    auto drawPixel(int x, int y, int r, int g, int b) -> void;
 
-    bool hasExit(void);
-    void closeWindow(void);
+    auto hasExit(void) -> bool;
+    auto closeWindow(void) -> void;
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     const uint8_t *keyboardState;
 
-    SDL_Window* createWindow(void);
-    SDL_Renderer* createRenderer(void);
+    auto createWindow(void) -> SDL_Window*;
+    auto createRenderer(void) -> SDL_Renderer*;
 };
