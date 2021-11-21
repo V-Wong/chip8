@@ -6,5 +6,5 @@
 
 
 namespace Parser {
-    std::vector<uint8_t> readProgram(std::string filePath);
+    auto readProgram(std::string filePath) -> std::vector<uint8_t>;
 }
