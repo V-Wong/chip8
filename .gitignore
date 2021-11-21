@@ -33,4 +33,5 @@
 
 # Build files
 /build
-main
+
+/bazel-*

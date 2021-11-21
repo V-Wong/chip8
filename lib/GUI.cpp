@@ -2,7 +2,7 @@
 
 #include "SDL.h"
 
-#include "../Display/Display.hpp"
+#include "lib/Display.hpp"
 
 auto constexpr PIXEL_SIZE = 20;
 

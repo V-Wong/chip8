@@ -1,9 +1,9 @@
-#include "Emulator.hpp"
+#include "lib/Emulator.hpp"
 
 #include <iostream>
 #include <stdlib.h>
 
-#include "../OPCodes/OPCodes.h"
+#include "lib/OPCodes.hpp"
 
 auto constexpr BYTE_SIZE = 8;
 auto constexpr INSTRUCTION_INCREMENT = 2;

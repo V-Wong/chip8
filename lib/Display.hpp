@@ -2,7 +2,6 @@
 
 #include <memory>
 #include <vector>
-#include "SDL.h"
 
 namespace DisplaySpecs {
     constexpr int PIXEL_WIDTH = 64;

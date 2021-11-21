@@ -1,8 +1,5 @@
-#pragma once
-
 #include <cstdint>
 #include <array>
-
 
 constexpr int MEMORY_LIMIT = 4096;
 
