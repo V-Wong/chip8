@@ -22,14 +22,14 @@ This project relies on the SDL graphics library. Run the following commands (or 
 4. ``sudo apt-get install libsdl2-mixer-dev``
 
 ### Building
-This project relies on the CMake build system generator. To build, simply run:
+This project relies on the Bazel build system. To build, simply run:
 ```sh
-$ cmake --build build
+$ bazel build //main
 ```
 
 The program can then be started by running:
 ```sh
-$ ./build/chip8
+$ ./bazel-bin/main/main <rom>
 ```
 
 ## Project Structure
