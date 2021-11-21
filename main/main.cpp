@@ -4,12 +4,11 @@
 
 #include "SDL.h"
 
-#include "src/Emulator/Emulator.hpp"
-#include "src/Display/Display.hpp"
-#include "src/Keyboard/Keyboard.hpp"
-#include "src/GUI/GUI.hpp"
-#include "src/Parser/Parser.hpp"
-
+#include "lib/Emulator.hpp"
+#include "lib/Display.hpp"
+#include "lib/Keyboard.hpp"
+#include "lib/GUI.hpp"
+#include "lib/Parser.hpp"
 
 int main(int argc, char **argv) {
     if (argc != 2) {

@@ -1,12 +1,10 @@
-#pragma once
-
 #include <cstdint>
 #include <stack>
 
-#include "../Memory/Memory.hpp"
-#include "../Display/Display.hpp"
-#include "../DecodedInstruction/DecodedInstruction.hpp"
-#include "../Fonts/Fonts.hpp"
+#include "lib/Memory.hpp"
+#include "lib/Display.hpp"
+#include "lib/DecodedInstruction.hpp"
+#include "lib/Fonts.hpp"
 
 
 class Emulator {

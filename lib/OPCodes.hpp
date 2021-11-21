@@ -1,6 +1,3 @@
-#pragma once
-
-
 namespace OPCodes {
     constexpr int INITIAL = 0;
     constexpr int CLEAR_DISPLAY = 0xE0;
